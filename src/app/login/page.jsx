@@ -8,7 +8,9 @@ import { useRouter } from 'next/navigation';
 import { ClipLoader } from 'react-spinners';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-
+import { auth } from '@/lib/firebaseConfig';
+import Link from 'next/link';
+import { getIdToken } from 'firebase/auth';
 
 
 
@@ -45,11 +47,20 @@ const Login = () => {
         setLoading(true);
 
         // firebase signin
-        signIn(email,password).then((userCredential)=>{
+        signIn(email,password).then(async(userCredential)=>{
             const user=userCredential.user;
             console.log("user=",user);
              setLoading(false);
-            toast.success('Login Successful');
+             toast.success('Login Successful');
+             
+             // check user status
+             if(auth.currentUser){
+               const token = await getIdToken(auth.currentUser);
+
+               // Set token in cookie 
+              document.cookie = `token=${token}; path=/; secure; samesite=lax`    
+             }
+
             router.push('/?coupon_code='+couponCode);
             
         }).catch((error)=>{
@@ -63,10 +74,10 @@ const Login = () => {
         });
     }
   return (
-    <div className="w-full max-w-sm mx-auto mt-30">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-300 px-4 " style={{backgroundImage: 'url("/login.jpg")',backgroundSize: 'cover',backgroundPosition: 'center'}}>
          <ToastContainer/>
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-8 rounded shadow">
-            <h2 className="text-2xl font-bold text-center text-gray-900" style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
+         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-8  shadow rounded-lg">
+            <h2 className="text-2xl font-bold text-center text-gray-900 " style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
               Login
             </h2>
 
@@ -121,9 +132,9 @@ const Login = () => {
               {/* Error message */}
               {errors.password && <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>}
             </div>
+            <p className="text-black text-center  text-sm">Don't have account ? <Link href="/signup"><span className="text-blue-600 text-sm">SignUp</span></Link></p>
 
-           
-            <button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded font-semibold">
+            <button type="submit" className="w-full bg-blue-700 hover:bg-blue-800 text-white py-2 rounded-full font-semibold cursor-pointer">
               {loading ? <ClipLoader size={20} color="#fff" /> : "Sign In"}
             </button>
            

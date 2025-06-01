@@ -1,11 +1,12 @@
 
-import dbConnect from "@/lib/dbConnect";
+import { dbConnect } from "@/lib/dbConnect";
 import Customers from "@/models/Customers";
 import { NextResponse } from "next/server";
 
 
 
 export async function POST(request) {
+    console.log("Db connection");
     await dbConnect();
 
     try {
@@ -24,9 +25,4 @@ export async function POST(request) {
     } catch (error) {
         return NextResponse.json({message:"Error in Sign Up in backend",status:500});
     }
-
-    
-
-    console.log(data);
-    return new Response(JSON.stringify(data));
 }

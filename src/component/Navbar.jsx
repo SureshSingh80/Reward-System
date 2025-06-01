@@ -8,22 +8,24 @@ import { logOut } from "@/lib/auth";
 
 const Navbar = () => {
   const { user, loading } = useAuth();
-  const [couponCode,setCouponCode] = useState('');
+  const [couponCode, setCouponCode] = useState("");
 
-  useEffect(()=>{
-         // get params data from URL
-          const queryString = window.location.search;
-          // create a searchParams object
-          const params = new URLSearchParams(queryString);
-  
-          const couponCode = params.get('coupon_code');
-          console.log("Navbar couponCode=",couponCode);
-          setCouponCode(couponCode);
-      })
+  useEffect(() => {
+    // get params data from URL
+    const queryString = window.location.search;
+    // create a searchParams object
+    const params = new URLSearchParams(queryString);
+
+    const couponCode = params.get("coupon_code");
+    console.log("Navbar couponCode=", couponCode);
+    setCouponCode(couponCode);
+  });
 
   const handleLogout = () => {
     logOut(auth);
-    window.location.href = "/?coupon_code="+couponCode;
+    // Clear the token cookie
+    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // expires=Thu, 01 Jan 1970 00:00:00 UTC; (this will delete the cookie properly even token also be deleted )
+    window.location.href = "/?coupon_code=" + couponCode;
   };
 
   return (
@@ -34,17 +36,19 @@ const Navbar = () => {
         </Link>
       </div>
       <div className="flex">
-        {user ?  (
+        {user ? (
           <>
             <button
-              style={{cursor:'pointer'}}
+              style={{ cursor: "pointer" }}
               onClick={handleLogout}
               className="mr-3 bg-white text-black px-3 py-2 rounded-lg"
             >
               Logout
             </button>
           </>
-        ):(<></>)}
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
