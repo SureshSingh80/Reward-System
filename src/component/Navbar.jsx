@@ -5,11 +5,15 @@ import HomeIcon from "@mui/icons-material/Home";
 import { useAuth } from "@/lib/AuthContext";
 import { auth } from "@/lib/firebaseConfig";
 import { logOut } from "@/lib/auth";
+import { ModeToggle } from "./ThemeToggle";
+import axios from "axios";
 
 const Navbar = () => {
   const { user, loading } = useAuth();
   const [couponCode, setCouponCode] = useState("");
+  const [isAdminLogin,setIsAdminLogin] = useState(false);
 
+  // for getting query params
   useEffect(() => {
     // get params data from URL
     const queryString = window.location.search;
@@ -21,12 +25,18 @@ const Navbar = () => {
     setCouponCode(couponCode);
   });
 
+ 
+
   const handleLogout = () => {
     logOut(auth);
     // Clear the token cookie
     document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // expires=Thu, 01 Jan 1970 00:00:00 UTC; (this will delete the cookie properly even token also be deleted )
     window.location.href = "/?coupon_code=" + couponCode;
   };
+
+  const handleAdminLogout = ()=>{
+        
+  }
 
   return (
     <div className="bg-blue-400 p-3 flex justify-between">
@@ -35,6 +45,7 @@ const Navbar = () => {
           <HomeIcon className="text-white" />
         </Link>
       </div>
+      {/* logout for user */}
       <div className="flex">
         {user ? (
           <>
@@ -47,8 +58,13 @@ const Navbar = () => {
             </button>
           </>
         ) : (
-          <></>
+          <>
+            
+          </>
         )}
+        
+        
+        {/* <ModeToggle /> */}
       </div>
     </div>
   );

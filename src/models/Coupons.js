@@ -1,6 +1,6 @@
-import mongoose from "mongoose";
+import {Schema,Types,model,models} from 'mongoose';
 
-const couponSchema = new mongoose.Schema({
+const couponSchema = new Schema({
     couponCode:{
         type:String,
         required:true,
@@ -15,12 +15,16 @@ const couponSchema = new mongoose.Schema({
         required:true,
 
     },
+    redeemedBy:{
+        type:Types.ObjectId,
+        ref:"Customers"
+    },
     createdAt:{
         type:Date,
         default:Date.now
     }
 });
 
-const Coupons = mongoose.models("Coupons") || mongoose.model("Coupons",couponSchema);
+const Coupons = models.Coupons || model("Coupons",couponSchema);
 
 export default Coupons;

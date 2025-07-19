@@ -5,6 +5,7 @@ import { NextResponse } from "next/server";
 export async function middleware(request) {
   const path = request.nextUrl.pathname;
   const token = request.cookies.get('token')?.value || null;
+ 
 //   console.log("token in middleware=",token);
 
   const isPublicPath =

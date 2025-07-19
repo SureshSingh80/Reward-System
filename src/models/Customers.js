@@ -1,39 +1,45 @@
-import mongoose from "mongoose";
+import {Schema,Types,model,models} from 'mongoose';
 
-
-
-const CustomerSchema = new mongoose.Schema({
-    c_id:{
-        type:String,
-        unique:true,
-        required:[true,"uid is required"]
-    },
-    name:{
-        type:String,
-        required:[true,"username is required"]
-    },
-    phone:{
-        type:Number,
-        unique:true
-    },
-    email:{
-        type:String,
-        unique:true,
-        required:[true,"email is required"]
-    },
-    address:{
-        type:String,     
-    },
-    reward_point:{
-        type:Number
-    },
-    bank_account_number:{
-        type:String
-    },
-    bank_name:{
-        type:String
-    }
+const CustomerSchema = new Schema({
+  c_id: {
+    type: String,
+    unique: true,
+    required: [true, "uid is required"],
+  },
+  name: {
+    type: String,
+    required: [true, "username is required"],
+  },
+  phone: {
+    type: Number
+  },
+  email: {
+    type: String,
+    unique: true,
+    required: [true, "email is required"],
+  },
+  address: {
+    type: String,
+  },
+  reedmedCoupons: {
+    type: [
+      {
+        type: Types.ObjectId,
+        ref: "Coupons",
+      },
+    ],
+  },
+  totalPoints: {
+      type: Number,
+      default:0  
+  },
+  bank_account_number: {
+    type: String,
+  },
+  bank_name: {
+    type: String,
+  },
 });
 
-const Customers = mongoose.models.Customers || mongoose.model("Customers",CustomerSchema);
+const Customers = models.Customers || model("Customers", CustomerSchema);
 export default Customers;

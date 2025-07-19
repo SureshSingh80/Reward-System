@@ -16,7 +16,8 @@ const dashboard = () => {
           console.log("Token is valid");
         }
       } catch (error) {
-        console.log("Token is invalid");
+        console.log("Error in verficatoin=",error.response.data);
+
         await logOut(auth);
         // Clear the token cookie
         document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // expires=Thu, 01 Jan 1970 00:00:00 UTC; (this will delete the cookie properly even token also be deleted )

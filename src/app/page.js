@@ -37,7 +37,7 @@ export default function Home() {
         />
         <h1 className="text-2xl font-bold mb-2 text-gray-800">Welcome to  Rewards!</h1>
         { loading ? (
-          <div className="text-blue-500 font-semibold">Loading...</div>
+          <div className="text-blue-500 font-semibold"></div>
         ) : user ? (
           <div className="text-green-500 font-semibold">Click On Reedom Coupon To Get Your Rewards</div>
         ) : (
@@ -46,7 +46,9 @@ export default function Home() {
        
 
         {loading ? (
-          <div className="text-blue-500 font-semibold">Loading...</div>
+          <div className="text-blue-500 font-semibold">
+            <div className="w-8 h-8 border-4 border-gray-300 border-t-transparent rounded-full animate-spin" />
+          </div>
         ) : user ? (
            <form onSubmit={handleSubmit} className="w-full flex flex-col items-center">
           <input

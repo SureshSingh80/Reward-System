@@ -21,8 +21,9 @@ export async function POST(request) {
             email:email
         });
         await newCustomer.save();
-        return NextResponse.json({message:"SignUp Successfull",status:200});
+        return NextResponse.json({message:"SignUp Successfull"},{status:200});
     } catch (error) {
-        return NextResponse.json({message:"Error in Sign Up in backend",status:500});
+        console.log(error);
+        return NextResponse.json({message:"Error in Sign Up in backend"},{status:500});
     }
 }

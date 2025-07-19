@@ -58,8 +58,8 @@ const SignUp = () => {
     signUp(email, password)
       .then(async (userCredential) => {
         const user = userCredential.user;
-        setLoading(false);
-        toast.success("Sign Up Successful");
+        
+        
         customer.c_id = user.uid;
 
         // store token in cookie
@@ -75,9 +75,14 @@ const SignUp = () => {
         try {
           const res = await axios.post("/api/signup", customer);
           console.log("backend-res=", res.data);
+          setLoading(false);
+          toast.success("Sign Up Successful");
           router.push("/?coupon_code=" + couponCode);
         } catch (error) {
           console.log("error in backend=", error);
+          setLoading(false);
+          toast.error("Error in Sign Up in backend");
+          router.push("/signup");
         }
       })
       .catch((error) => {
