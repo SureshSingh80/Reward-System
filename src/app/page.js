@@ -78,7 +78,7 @@ export default function Home() {
               </Link>
               <Link href={`/signup?coupon_code=${couponCode}`}>
                 <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition cursor-pointer">
-                  Sign Up
+                  Sign Upp
                 </button>
               </Link>
             </div>

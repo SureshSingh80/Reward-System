@@ -28,7 +28,7 @@ const dashboard = () => {
   }, []);
 
   return (
-    <div>dashboard</div>
+    <div>User Dashboard</div>
   )
 }
 
