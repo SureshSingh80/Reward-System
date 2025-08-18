@@ -19,6 +19,9 @@ const couponSchema = new Schema({
         type:Types.ObjectId,
         ref:"Customers"
     },
+    redeemedByEmail:{
+        type:String
+    },
     createdAt:{
         type:Date,
         default:Date.now

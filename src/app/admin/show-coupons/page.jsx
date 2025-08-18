@@ -104,7 +104,7 @@ const ShowCoupon = () => {
                     <div className="flex justify-around items-center">
                       {coupon.isClaimed ? (
                         <PreviewIcon
-                          onClick={()=>router.push(`/admin/edit-coupon/${coupon._id}`)}
+                          onClick={()=>router.push(`/admin/view-claimed/${coupon._id}`)}
                           sx={{ fontSize: 25 }}
                           className="mr-2 text-blue-400 cursor-pointer"
                         />

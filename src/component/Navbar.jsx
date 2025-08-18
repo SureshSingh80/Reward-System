@@ -34,12 +34,12 @@ const Navbar = () => {
     window.location.href = "/?coupon_code=" + couponCode;
   };
 
-  const handleAdminLogout = ()=>{
-        
-  }
+  
 
   return (
+    
     <div className="bg-blue-400 p-3 flex justify-between">
+      
       <div className="flex items-center mr-3">
         <Link href="/" className="text-white ml-2">
           <HomeIcon className="text-white" />
