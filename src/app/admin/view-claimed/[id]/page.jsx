@@ -8,10 +8,8 @@ import EmailIcon from "@mui/icons-material/Email";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
-import ClaimedCouponDeletePopUp, {
-  claimedCouponDeletePopUp,
-} from "@/component/ClaimedCouponDeletePopUp";
-import { set } from "mongoose";
+import ClaimedCouponDeletePopUp from "@/component/ClaimedCouponDeletePopUp";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
 const page = () => {
   const params = useParams(); // get parameter(id) from url
@@ -32,12 +30,30 @@ const page = () => {
         );
         console.log("claimed coupon response", res.data.message);
         setClaimedCoupon(res.data.message);
+        setLoading(false);
       } catch (error) {
         console.log(error);
+        setLoading(false);
       }
     };
     FetchCoupon();
   }, []);
+
+  // verify token for admin
+  // useEffect(() => {
+  //   const checkAdminAuth = async () => {
+  //     try {
+  //       const res = await axios.get("/api/admin/verify-token");
+  //       console.log("response from verify Token=", res.data);
+  //       setIsVerfied(true);
+  //     } catch (error) {
+  //       console.log(error.response.data);
+  //       setIsVerfied(false);
+  //       router.push("/admin/login");
+  //     }
+  //   };
+  //   checkAdminAuth();
+  // }, []);
 
   const handleCopy = (value) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -142,7 +158,7 @@ const page = () => {
                 {/* Claimed Information */}
                 <div className="flex justify-between w-full relative mt-4">
                   <p className="text-gray-500">Redemmed By</p>
-                  <p>{claimedCoupon?.redeemedBy}</p>
+                  <p>{claimedCoupon?.redeemedBy?._id}</p>
                 </div>
 
                 {/* Customer Information */}
@@ -150,10 +166,28 @@ const page = () => {
                   <p>Customer Information</p>
                 </div>
 
-                {/* Email Information */}
+                {/* Email  */}
                 <div className="flex justify-between w-full relative mt-4">
                   <p className="text-gray-500">Email</p>
-                  <p>{claimedCoupon?.redeemedByEmail}</p>
+                  <p>{claimedCoupon?.redeemedBy?.email}</p>
+                </div>
+
+                {/* Name */}
+                <div className="flex justify-between w-full relative mt-4">
+                  <p className="text-gray-500">Customer Name</p>
+                  <p>{claimedCoupon?.redeemedBy?.name}</p>
+                </div>
+
+                {/* Adderss */}
+                <div className="flex justify-between w-full relative mt-4">
+                  <p className="text-gray-500">Address</p>
+                  <p>{(claimedCoupon?.redeemedBy?.address ? address :'Address Not registered')}</p>
+                </div>
+
+                {/* phoneNo. */}
+                <div className="flex justify-between w-full relative mt-4">
+                  <p className="text-gray-500">Contact Number</p>
+                  <p>{(claimedCoupon?.redeemedBy?.phone ? phone :'Contact  not registered')}</p>
                 </div>
 
                 {/* delete and contact button */}
@@ -161,7 +195,7 @@ const page = () => {
                   {/* Contact Customer */}
                   <div>
                     <a
-                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${claimedCoupon?.redeemedByEmail}&su=Regarding%20Your%20Reward&body=Hello%2C%0A%0AI%20wanted%20to%20discuss%20your%20recent%20coupon%20redemption.`}
+                      href={`https://mail.google.com/mail/?view=cm&fs=1&to=${claimedCoupon?.redeemedBy?.email}&su=Regarding%20Your%20Reward&body=Hello%2C%0A%0AI%20wanted%20to%20discuss%20your%20recent%20coupon%20redemption.`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
@@ -196,8 +230,22 @@ const page = () => {
               </div>
             </div>
           </div>
-        ) : (
+        ) : loading ? (
           <Loader />
+        ) : (
+          <div className="flex flex-col items-center justify-center bg-white shadow-md rounded-lg p-6 w-full max-w-md mx-auto">
+            <ErrorOutlineIcon className="text-red-500" sx={{ fontSize: 50 }} />
+
+            <h2 className="text-lg font-semibold text-gray-800 mt-3">
+              Coupon Not Found
+            </h2>
+            
+            <p className="text-gray-600 text-center mt-1">
+              The coupon you are trying to find does not exist or may have
+              already been used.
+            </p>
+
+          </div>
         )}
       </div>
 

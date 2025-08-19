@@ -65,6 +65,7 @@ const page = () => {
     window.location.href = "/admin/show-coupons";
   };
 
+  // verify token for admin
   useEffect(() => {
     const checkAdminAuth = async () => {
       try {

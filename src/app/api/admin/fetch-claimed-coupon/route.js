@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request) {
     try {
-        dbConnect();
+        await dbConnect();
         console.log("Get Request for fetche coupon");
         
         const {searchParams} = new URL(request.url);
@@ -15,7 +15,7 @@ export async function GET(request) {
         if(!id)
             return NextResponse.json({message:"ID is required"},{status:400});
 
-        const coupon = await Coupons.findById(id);
+        const coupon = await Coupons.findById(id).populate('redeemedBy');
 
         if(!coupon){
             return NextResponse.json({message:"Coupon Not found"},{status:400});

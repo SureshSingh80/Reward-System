@@ -2,10 +2,13 @@ import React, { useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import { set } from 'mongoose';
+import { useRouter } from 'next/navigation';
+
 
 const ClaimedCouponDeletePopUp = ({claimedCouponDeletePopUp,setClaimedCouponDeletePopUp,error,setError,couponCode,typedCouponCode,setTypedCouponCode}) => {
 
     const [loading,setLoading] = useState(false);
+    const router = useRouter();
 
     // condition: does typed text match couponCode?
   const isMatch = typedCouponCode === couponCode;
@@ -23,6 +26,7 @@ const ClaimedCouponDeletePopUp = ({claimedCouponDeletePopUp,setClaimedCouponDele
               console.log(res.data.message);
               setClaimedCouponDeletePopUp(false);
               setLoading(false);
+              router.replace('/admin/claimed-coupons');
            } catch (error) {
               console.log("Error in deleting claimed coupon",error);
               setLoading(false);

@@ -13,6 +13,15 @@ export async function GET(request){
         const decoded = jwt.verify(token,process.env.JWT_SECRET);
         console.log("Decoded token= ",decoded);
         if(decoded.role!='admin'){
+            // clear adminToken
+            const response = NextResponse.json({ok:false,message:"failed to verify"},{status:401});
+            response.cookies.set('adminToken','',{
+               path:'/',
+               httpOnly:true,
+               // secure:true,
+               sameSite:"lax",
+               expires: new Date(0)
+            })
             throw new Error("Not admin");
         }
      } catch (error) {

@@ -1,52 +1,14 @@
-"use client";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+'use client'
+import axios from 'axios';
+import React, { use, useEffect, useState } from 'react'
 import LightbulbOutlineIcon from "@mui/icons-material/LightbulbOutline";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PreviewIcon from "@mui/icons-material/Preview";
+import Loader from '@/component/Loader';
+import { useRouter } from 'next/navigation';
 
-import { ToastContainer, toast } from "react-toastify";
-import EditPopUp from "@/component/EditPopUp";
-import DeletePopUp from "@/component/DeletePopUp";
-import Loader from "@/component/Loader";
-import { useRouter } from "next/navigation";
-
-const ShowCoupon = () => {
-  const [coupons, SetCoupons] = useState(); // all avlabile coupons
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [editPopUp, setEditPopUp] = useState(false);
-  const [deletePopUp, setDeletePopUp] = useState(false);
-  const [editableData, setEditableData] = useState({
-    _id: "",
-    couponCode: "",
-    rewardsPoint: "",
-  });
-
-  const [deletableData, setDeletableData] = useState({
-    _id: "",
-  });
-
-  const router = useRouter();
-
-  useEffect(() => {
-    const fetchCoupons = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("/api/admin/fetch-coupons");
-        //   console.log(res.data);
-        SetCoupons(res.data);
-        setLoading(false);
-      } catch (error) {
-        console.log("Error from fetch coupons", error);
-        setLoading(false);
-      }
-    };
-    fetchCoupons();
-  }, []);
-
-  // verify token for admin
+// verify token for admin
   // useEffect(() => {
   //   const checkAdminAuth = async () => {
   //     try {
@@ -62,18 +24,33 @@ const ShowCoupon = () => {
   //   checkAdminAuth();
   // }, []);
 
+const page = () => {
+
+    const [loading,setLoading] = useState(true);
+    const [coupons,SetCoupons] = useState([]);
+    const router = useRouter();
+
+    useEffect(()=>{
+        const fetchClaimedCoupons = async () => {
+            setLoading(true);
+            try {
+              const res = await axios.get("/api/admin/fetch-claimed-coupons");
+                console.log("claimed coupons = ",res.data.coupons);
+              SetCoupons(res.data.coupons);
+              setLoading(false);
+            } catch (error) {
+              console.log("Error from fetch coupons", error);
+              setLoading(false);
+            }
+        }
+        fetchClaimedCoupons();
+    },[])
   return (
     <>
-      {loading ? (
-        <Loader />
-      ) : (
-        <div
-          className={`flex flex-col  items-center  min-h-screen bg-gray-200 px-4 text-black ${
-            editPopUp || deletePopUp ? "blur-sm" : ""
-          }`}
-        >
-          <ToastContainer />
-          {coupons && coupons.length > 0 ? (
+      {
+        loading ? <Loader/> : (
+            <div className='flex flex-col  items-center  min-h-screen bg-gray-200 px-4 text-black'>
+                {coupons && coupons.length > 0 ? (
             coupons.map((coupon) => (
               <div key={coupon._id} className="w-full">
                 {/* coupon card */}
@@ -118,45 +95,14 @@ const ShowCoupon = () => {
                       </span>
                     </div>
                     <div className="flex justify-around items-center">
-                      {coupon.isClaimed ? (
+                      
                         <PreviewIcon
                           onClick={()=>router.push(`/admin/view-claimed/${coupon._id}`)}
                           sx={{ fontSize: 25 }}
                           className="mr-2 text-blue-400 cursor-pointer"
                         />
-                      ) : (
-                        <>
-                          <EditIcon
-                            onClick={() => {
-                              setEditableData({
-                                _id: coupon._id,
-                                couponCode: coupon.couponCode,
-                                rewardsPoint: coupon.rewardsPoint,
-                              });
-                              setEditPopUp(true);
-                              setError("");
-                            }}
-                            sx={{ fontSize: 25 }}
-                            className="mr-2 text-orange-400 cursor-pointer"
-                          />
-                          <DeleteForeverIcon
-                            onClick={() => {
-                              setDeletableData({
-                                _id: coupon._id,
-                              });
-                              setDeletePopUp(true);
-                              setError("");
-                            }}
-                            sx={{ fontSize: 25 }}
-                            className="mr-2 text-red-500 cursor-pointer"
-                          />
-                          <PreviewIcon
-                            sx={{ fontSize: 25 }}
-                            onClick={()=>router.push(`/admin/view-coupon/${coupon._id}`)}
-                            className="mr-2 text-blue-400 cursor-pointer"
-                          />
-                        </>
-                      )}
+                     
+                     
                     </div>
                   </div>
                 </div>
@@ -172,27 +118,11 @@ const ShowCoupon = () => {
               </div>
             </div>
           )}
-        </div>
-      )}
-
-      <EditPopUp
-        editPopUp={editPopUp}
-        setEditPopUp={setEditPopUp}
-        editableData={editableData}
-        setEditableData={setEditableData}
-        error={error}
-        setError={setError}
-      />
-
-      <DeletePopUp
-        deletePopUp={deletePopUp}
-        deletableData={deletableData}
-        setDeletePopUp={setDeletePopUp}
-        error={error}
-        setError={setError}
-      />
+            </div>
+          )
+      }  
     </>
-  );
-};
+  )
+}
 
-export default ShowCoupon;
+export default page
