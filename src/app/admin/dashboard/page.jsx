@@ -59,6 +59,8 @@ const page = () => {
       toast.error("please fill all the fields");
       setLoading(false);
     }
+    setCouponCode("");
+    setRewardsPoint("");
   };
 
   const handleShowGeneratedCoupon = () => {

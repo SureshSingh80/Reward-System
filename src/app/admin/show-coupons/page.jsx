@@ -11,9 +11,10 @@ import EditPopUp from "@/component/EditPopUp";
 import DeletePopUp from "@/component/DeletePopUp";
 import Loader from "@/component/Loader";
 import { useRouter } from "next/navigation";
+import ToolBar from "@/component/ToolBar";
 
 const ShowCoupon = () => {
-  const [coupons, SetCoupons] = useState(); // all avlabile coupons
+  const [coupons, setCoupons] = useState(); // all avlabile coupons
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editPopUp, setEditPopUp] = useState(false);
@@ -35,8 +36,8 @@ const ShowCoupon = () => {
       setLoading(true);
       try {
         const res = await axios.get("/api/admin/fetch-coupons");
-        //   console.log(res.data);
-        SetCoupons(res.data);
+          console.log(res.data);
+        setCoupons(res.data);
         setLoading(false);
       } catch (error) {
         console.log("Error from fetch coupons", error);
@@ -73,11 +74,17 @@ const ShowCoupon = () => {
           }`}
         >
           <ToastContainer />
+          
+          {/* Toolbar Container for searching sorting and filter */}
+         <ToolBar setCoupons={setCoupons}/>
+         
           {coupons && coupons.length > 0 ? (
             coupons.map((coupon) => (
               <div key={coupon._id} className="w-full">
+
+                
                 {/* coupon card */}
-                <div  className="bg-gray-100 w-full  p-4 shadow-lg flex flex-col justify-center mt-4">
+                <div  className="bg-gray-100 w-full  p-4 shadow-lg flex flex-col justify-center mt-4 transition-all duration-200 hover:shadow-md hover:scale-101 cursor-pointer">
                   {/* first row */}
                   <div className="flex flex-row justify-between">
                     <div className="flex ">
@@ -182,6 +189,7 @@ const ShowCoupon = () => {
         setEditableData={setEditableData}
         error={error}
         setError={setError}
+        setCoupons={setCoupons}
       />
 
       <DeletePopUp

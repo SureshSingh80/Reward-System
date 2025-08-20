@@ -3,7 +3,8 @@ import React, { useEffect,useState } from 'react'
 import CloseIcon from "@mui/icons-material/Close";
 import axios from 'axios';
 
-const EditPopUp = ({editPopUp,setEditPopUp,editableData,setEditableData,error,setError}) => {
+
+const EditPopUp = ({editPopUp,setEditPopUp,editableData,setEditableData,error,setError,setCoupons}) => {
 
     const [editLoading, setEditLoading] = useState(false);
     
@@ -33,15 +34,23 @@ const EditPopUp = ({editPopUp,setEditPopUp,editableData,setEditableData,error,se
       else{
         setEditLoading(true);
            try {
+
               const res = await axios.post('/api/admin/update-coupon',{
                   _id:editableData._id,
                   couponCode:editableData.couponCode,
                   rewardsPoint:editableData.rewardsPoint
               });
-            console.log(res);
+
+            console.log(res.data.coupon);
+            const updatedCoupon = res.data.coupon;
             setEditLoading(false);
             setEditPopUp(false);
-            window.location.reload();
+
+            setCoupons(prevCoupons =>
+                prevCoupons.map(coupon =>
+                  coupon._id === updatedCoupon._id ? updatedCoupon : coupon
+                )
+              );
          
       } catch (error) {
          console.log("Error while updating coupon",error.response.data.message);
