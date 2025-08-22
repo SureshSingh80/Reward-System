@@ -1,7 +1,11 @@
 import axios from 'axios';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 const ToolBar = ({setCoupons}) => {
+
+  const [searchTerm,setSearchTerm] = useState("");
+  const [deBoundecedSearch,setDeBoundecedSearch] = useState(searchTerm);
+
 
   // handle filtering data
   const handleFilterChange = async(e) => {
@@ -9,6 +13,7 @@ const ToolBar = ({setCoupons}) => {
 
     // validation for filter
     if(!filter){
+      console.log("filter input is required");
       return;
     }
     try {
@@ -16,7 +21,7 @@ const ToolBar = ({setCoupons}) => {
          console.log(filteredData.data.message);
          setCoupons(filteredData.data.message);
     } catch (error) {
-       console.log("Error in fetching filtered coupons");
+       console.log("Error in fetching filtered coupons",error);
     }
   };
 
@@ -25,6 +30,7 @@ const ToolBar = ({setCoupons}) => {
     const sort = e.target.value;
 
     if(!sort){
+      console.log("Sort input is required");
       return;
     }
 
@@ -33,9 +39,34 @@ const ToolBar = ({setCoupons}) => {
          console.log(filteredData.data.message);
          setCoupons(filteredData.data.message);
     } catch (error) {
-       console.log("Error in fetching filtered coupons");
+       console.log("Error in fetching filtered coupons",error);
     }
   }
+  // handle searching
+
+  useEffect(()=>{
+       const handler = setTimeout(()=>{
+          setDeBoundecedSearch(searchTerm);
+       },1000);
+      return () =>{
+        clearTimeout(handler); // clear timeout on each key stroke
+      }
+  },[searchTerm]);
+
+  useEffect(()=>{
+      const fetchSearchResults = async ()=>{
+          try {
+            const searchResults = await axios.get(`/api/admin/fetch-search-coupons?search=${deBoundecedSearch}`);
+            console.log("search result= ",searchResults.data.message);
+            setCoupons(searchResults.data.message);
+          } catch (error) {
+            console.log('Error in fetching search results',error);
+             
+          }
+      }
+
+      fetchSearchResults();
+  },[deBoundecedSearch]);
 
   return (
 
@@ -45,8 +76,10 @@ const ToolBar = ({setCoupons}) => {
           <div className="flex items-center gap-2 w-full sm:w-auto">
             <input
               type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Search by coupon code..."
-              className="w-full sm:w-64 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+              className="w-full sm:w-64 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400" 
             />
           </div>
 

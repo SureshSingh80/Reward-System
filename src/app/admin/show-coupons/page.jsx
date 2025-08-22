@@ -12,6 +12,8 @@ import DeletePopUp from "@/component/DeletePopUp";
 import Loader from "@/component/Loader";
 import { useRouter } from "next/navigation";
 import ToolBar from "@/component/ToolBar";
+import { Ban } from "lucide-react";
+import CouponNotFound from "@/component/CouponNotFound";
 
 const ShowCoupon = () => {
   const [coupons, setCoupons] = useState(); // all avlabile coupons
@@ -170,14 +172,7 @@ const ShowCoupon = () => {
               </div>
             ))
           ) : ( 
-            <div className=" mb-2 flex flex-col justify-center items-center w-full h-screen ">
-              <div className="shadow-lg bg-white rounded-xl p-12">
-               <div className="text-xl">No Coupons Found</div>
-                <div className="text-center mt-6">
-                  <button onClick={() => router.back()} className="bg-gray-600 text-white py-2 px-4 rounded cursor-pointer">Back </button>
-                </div>
-              </div>
-            </div>
+           <CouponNotFound/>
           )}
         </div>
       )}

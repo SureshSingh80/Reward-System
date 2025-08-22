@@ -17,7 +17,7 @@ export async function GET(request){
 
         if(sort=='ascending'){
             sortedCoupons = await Coupons.find().sort({rewardsPoint:1});
-            // console.log("ascending sortedCoupons= ",sortedCoupons);
+            console.log("ascending sortedCoupons= ",sortedCoupons);
             
         }
 
