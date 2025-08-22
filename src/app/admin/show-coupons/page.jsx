@@ -11,9 +11,11 @@ import EditPopUp from "@/component/EditPopUp";
 import DeletePopUp from "@/component/DeletePopUp";
 import Loader from "@/component/Loader";
 import { useRouter } from "next/navigation";
-import ToolBar from "@/component/ToolBar";
+import AdminToolBar from "@/component/AdminToolBar";
 import { Ban } from "lucide-react";
 import CouponNotFound from "@/component/CouponNotFound";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 const ShowCoupon = () => {
   const [coupons, setCoupons] = useState(); // all avlabile coupons
@@ -30,6 +32,8 @@ const ShowCoupon = () => {
   const [deletableData, setDeletableData] = useState({
     _id: "",
   });
+
+  const [copiedId,setCopiedId] = useState(false);
 
   const router = useRouter();
 
@@ -48,6 +52,27 @@ const ShowCoupon = () => {
     };
     fetchCoupons();
   }, []);
+
+  const handleCopy = (value,id) => {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(value)
+        .then(() => {
+          setCopiedId(id);
+        })
+        .catch((error) => {
+          console.log("clipboard copy failed", error);
+          alert("Copy failed, Try manually");
+        });
+    } else {
+      alert("Clipboard not supported in this environment");
+    }
+
+    // reset copy state after 2 second
+    setTimeout(() => {
+      setCopiedId(false);
+    }, 2000);
+  };
 
   // verify token for admin
   // useEffect(() => {
@@ -78,7 +103,7 @@ const ShowCoupon = () => {
           <ToastContainer />
           
           {/* Toolbar Container for searching sorting and filter */}
-         <ToolBar setCoupons={setCoupons}/>
+         <AdminToolBar setCoupons={setCoupons}/>
          
           {coupons && coupons.length > 0 ? (
             coupons.map((coupon) => (
@@ -102,6 +127,20 @@ const ShowCoupon = () => {
                         style={{ fontSize: "16px" }}
                       >
                         {coupon.couponCode}
+                      </span>
+
+                      <span className="ml-2 relative" style={{bottom: "1px"}}>
+                        {copiedId === coupon._id ? (
+                          <DoneAllIcon sx={{ fontSize: 15 }} />
+                        ) : (
+                          <ContentCopyIcon
+                            sx={{ fontSize: 13 }}
+                            className="cursor-pointer"
+                            onClick={() =>
+                              handleCopy(coupon.couponCode, coupon._id)
+                            }
+                          />
+                        )}
                       </span>
                     </div>
 

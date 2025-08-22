@@ -7,6 +7,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Loader from '@/component/Loader';
 import { ClipLoader } from 'react-spinners';
+import { ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 
 export default function Home() {
   const { user, loading } = useAuth(); // getting auth state from context
@@ -65,6 +67,7 @@ export default function Home() {
          const res = await axios.post('/api/redeem-coupon',{couponCode:couponCode,email:user?.email,_id:currentUser._id});
          console.log(res);
          setIsSubmitting(false);
+         toast.success("Coupon redeemed successfully");
       } catch (error) {
          setIsSubmitting(false);
          setError(error.response.data.message);
@@ -74,6 +77,7 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      <ToastContainer/>
       {console.log("user== ",user)}
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 flex flex-col items-center">
         <Image
@@ -90,7 +94,8 @@ export default function Home() {
           <div className="text-green-500 font-semibold">Click On Reedom Coupon To Get Your Rewards</div>
         ) : (
           <div className="text-red-500 font-semibold">You are not logged in</div>
-        )}
+        )
+        }
        
 
         {loading ? (

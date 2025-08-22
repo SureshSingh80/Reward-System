@@ -39,8 +39,8 @@ const DeletePopUp = ({deletePopUp,setDeletePopUp,deletableData,error,setError}) 
 
           {/* choice for delete */}
           <div>
-            <button onClick={handleDelete} className="bg-red-500 text-white py-2 px-4 rounded-md mr-2 cursor-pointer ">Delete</button>
-            <button onClick={()=>setDeletePopUp(false)} className="bg-gray-500 text-white py-2 px-4 rounded-md cursor-pointer">Cancel</button>
+            <button onClick={handleDelete} className="bg-red-500 text-white py-2 px-4 rounded-md mr-2 cursor-pointer active:scale-95">Delete</button>
+            <button onClick={()=>setDeletePopUp(false)} className="bg-gray-500 text-white py-2 px-4 rounded-md cursor-pointer active:scale-95">Cancel</button>
           </div>
 
         </div>

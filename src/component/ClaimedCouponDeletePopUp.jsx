@@ -59,12 +59,12 @@ const ClaimedCouponDeletePopUp = ({claimedCouponDeletePopUp,setClaimedCouponDele
           {/* choice for delete */}
           <div>
             <button onClick={handleDelete}   disabled={!isMatch}
-            className={`py-2 px-4 rounded-md mr-2 cursor-pointer ${
+            className={`py-2 px-4 rounded-md mr-2 cursor-pointer active:scale-95 ${
               isMatch
                 ? "bg-red-500 text-white hover:bg-red-600"
                 : "bg-gray-300 text-gray-600 cursor-not-allowed"
             }`}>{loading ? "Deleting..." : "Delete"}</button>
-            {/* <button onClick={()=>setClaimedCouponDeletePopUp(false)} className="bg-gray-500 text-white py-2 px-4 rounded-md cursor-pointer">Cancel</button> */}
+            <button onClick={()=>setClaimedCouponDeletePopUp(false)} className="bg-gray-500 text-white py-2 px-4 rounded-md cursor-pointer active:scale-95">Cancel</button>
           </div>
 
         </div>

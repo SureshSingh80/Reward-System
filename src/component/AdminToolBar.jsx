@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
 
-const ToolBar = ({setCoupons}) => {
+const AdminToolBar = ({setCoupons}) => {
 
   const [searchTerm,setSearchTerm] = useState("");
   const [deBoundecedSearch,setDeBoundecedSearch] = useState(searchTerm);
@@ -110,4 +110,4 @@ const ToolBar = ({setCoupons}) => {
   )
 }
 
-export default ToolBar
+export default AdminToolBar

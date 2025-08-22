@@ -50,9 +50,12 @@ const page = () => {
       {
         loading ? <Loader/> : (
             <div className='flex flex-col  items-center  min-h-screen bg-gray-200 px-4 text-black'>
+                <h1 className="text-2xl font-bold mb-2 text-gray-800 mt-4">Claimed Coupons</h1>
                 {coupons && coupons.length > 0 ? (
             coupons.map((coupon) => (
               <div key={coupon._id} className="w-full">
+
+                 
                 {/* coupon card */}
                 <div  className="bg-gray-100 w-full  p-4 shadow-lg flex flex-col justify-center mt-4">
                   {/* first row */}

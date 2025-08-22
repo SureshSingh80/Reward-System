@@ -9,7 +9,7 @@ export async function GET(request){
             const search = searchParams.get('search');
             console.log("search= ",search);
             const coupons = await Coupons.find({couponCode:{$regex:search,$options:"i"}});
-            console.log("fetched coupons= ",coupons);
+            // console.log("fetched searched coupons= ",coupons);
             return NextResponse.json({message:coupons},{status:200});
     }
     catch(error){

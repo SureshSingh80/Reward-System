@@ -2,6 +2,9 @@ import { dbConnect } from "@/lib/dbConnect";
 import Coupons from "@/models/Coupons";
 import { NextResponse } from "next/server";
 
+
+import Customers from "@/models/Customers";
+
 export async function GET(request) {
     try {
         await dbConnect();

@@ -199,7 +199,7 @@ const page = () => {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      <button className="bg-blue-600 text-white  px-2 py-2  cursor-pointer">
+                      <button className="bg-blue-600 text-white  px-2 py-2  cursor-pointer active:scale-95">
                         <EmailIcon />{" "}
                         <span className="relative" style={{ top: "2px" }}>
                           Contact Customer
@@ -216,7 +216,7 @@ const page = () => {
                           setTypedCouponCode(""),
                           setError("");
                       }}
-                      className="bg-red-500 text-white px-3 py-2 cursor-pointer"
+                      className="bg-red-500 text-white px-3 py-2 cursor-pointer active:scale-95"
                     >
                       <span className="mr-1">
                         <DeleteForeverIcon />
