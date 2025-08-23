@@ -13,6 +13,7 @@ const firebaseConfig = {
   measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID
 };
 
+
   const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
   console.log("firebaseConfig initilized app is",getApps().length);
   console.log("api key=: ",process.env.NEXT_PUBLIC_FIREBASE_API_KEY);
