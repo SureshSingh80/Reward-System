@@ -5,8 +5,10 @@ export async function POST(request) {
     
     
     const token = request.cookies.get("token")?.value || null;
+    console.log("token = ", token);
         
     if (!token) {
+        console.log("token not found");
         return new Response(JSON.stringify({ message: "Token not found" }), {
         status: 401,
         });

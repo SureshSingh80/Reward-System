@@ -14,9 +14,9 @@ export async function GET(request){
                   return NextResponse.json({message:"Email is required"},{status:400});
 
             const coupons = await Coupons.find({redeemedByEmail:email,isClaimed:true});
-            console.log("coupons= ",coupons);
+            console.log("claimed coupons for email= ",coupons);
 
-            return NextResponse.json({message:"Success"},{status:200});
+            return NextResponse.json({message:coupons},{status:200});
 
       }catch (error) {
             console.log("Error in fetching data using email");

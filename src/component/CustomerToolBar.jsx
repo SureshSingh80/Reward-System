@@ -1,7 +1,8 @@
+import axios from 'axios';
 import React from 'react'
 import { useState,useEffect } from 'react';
 
-const CustomerToolBar = () => {
+const CustomerToolBar = ({claimedCoupons,setClaimedCoupons,email}) => {
 
        const [searchTerm,setSearchTerm] = useState("");
       const [deBoundecedSearch,setDeBoundecedSearch] = useState(searchTerm);
@@ -18,14 +19,15 @@ const CustomerToolBar = () => {
 
   useEffect(()=>{
       const fetchSearchResults = async ()=>{
-        //   try {
-        //     const searchResults = await axios.get(`/api/admin/fetch-search-coupons?search=${deBoundecedSearch}`);
-        //     console.log("search result= ",searchResults.data.message);
-        //     setCoupons(searchResults.data.message);
-        //   } catch (error) {
-        //     console.log('Error in fetching search results',error);
+          try {
+            // searching with user credentials (email)
+            const searchResults = await axios.get('/api/fetch-search-coupons?search='+deBoundecedSearch+'&email='+email);
+            console.log("search result= ",searchResults.data.message);
+            setClaimedCoupons(searchResults.data.message);
+          } catch (error) {
+            console.log('Error in fetching search results',error);
              
-        //   }
+          }
       }
 
       fetchSearchResults();
@@ -41,9 +43,9 @@ const CustomerToolBar = () => {
     }
 
     try {
-         const filteredData = await axios.get(`/api/admin/fetch-sorting-coupons?sort=${sort}`);
-         console.log(filteredData.data.message);
-         setCoupons(filteredData.data.message);
+         const filteredData = await axios.get(`/api/fetch-sorting-coupons?sort=${sort} &email=${email}`);
+         console.log("filterdData=",filteredData.data.message);
+         setClaimedCoupons(filteredData.data.message);
     } catch (error) {
        console.log("Error in fetching filtered coupons",error);
     }
@@ -67,12 +69,10 @@ const CustomerToolBar = () => {
           {/* Sort Feature */}
           <div className="flex items-center gap-2">
             <span className="w-full  text-gray-600 font-medium">Sort by:</span>
-            <select onChange={handleSorting} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ">
-              <option value='default'>Created At (Default)</option>
+            <select onChange={handleSorting}  className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ">
+              <option value="">---Select---</option>
               <option value="ascending">Ascending</option>
-              <option value="descending">Descending</option>
-              <option value="newest">Newest</option>
-              <option value="oldest">oldest</option>
+              <option value="descending">Descending</option>            
             </select>
           </div>
         </div>

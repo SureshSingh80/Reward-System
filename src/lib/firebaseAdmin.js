@@ -3,7 +3,7 @@ import admin from 'firebase-admin';
 
 const adminConfig = JSON.parse(process.env.FIREBASE_ADMIN_SDK);
 
-console.log("Admin config= ",adminConfig);
+// console.log("Admin config= ",adminConfig);
 
 
 if (!adminConfig) {
@@ -20,7 +20,7 @@ if (!admin.apps.length) {
 export const verifyIdToken = async (idToken) => {
   try {
     const decodedToken = await admin.auth().verifyIdToken(idToken);
-    console.log("Decoded token in firebaseAdmin=",decodedToken);
+    // console.log("Decoded token in firebaseAdmin=",decodedToken);
     return decodedToken;
   } catch (error) {
     console.error('Error verifying ID token:', error);

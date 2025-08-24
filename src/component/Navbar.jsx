@@ -27,10 +27,11 @@ const Navbar = () => {
 
  
 
-  const handleLogout = () => {
+  const handleLogout = async() => {
     logOut(auth);
     // Clear the token cookie
-    document.cookie = "token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 UTC;"; // expires=Thu, 01 Jan 1970 00:00:00 UTC; (this will delete the cookie properly even token also be deleted )
+    await axios.post('/api/clear-token');
+    
     window.location.href = "/?coupon_code=" + couponCode;
   };
 

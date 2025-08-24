@@ -9,8 +9,11 @@ import Loader from '@/component/Loader';
 import { ClipLoader } from 'react-spinners';
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
+   const router = useRouter();
+
   const { user, loading } = useAuth(); // getting auth state from context
   const [couponCode,setCouponCode] = useState('');
   const [submitting,setIsSubmitting] = useState(false);
@@ -68,6 +71,8 @@ export default function Home() {
          console.log(res);
          setIsSubmitting(false);
          toast.success("Coupon redeemed successfully");
+         router.push('/dashboard');
+
       } catch (error) {
          setIsSubmitting(false);
          setError(error.response.data.message);

@@ -7,7 +7,7 @@ const CouponNotFound = () => {
       <Ban className="w-12 h-12 text-red-500 mb-3" />
       <p className="text-lg font-medium">No Coupon Found</p>
       <span className="text-sm text-gray-400">
-        you are tring to find wrong way or deleted By Admin
+        you are tring to find coupon is no longer available
       </span>
     </div>
   );

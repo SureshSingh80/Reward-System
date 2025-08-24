@@ -7,15 +7,17 @@ export async function GET(request){
             await dbConnect();
             const {searchParams} = new URL(request.url);
             const search = searchParams.get('search');
+            const email = searchParams.get('email');
+            console.log("search= ",search+' email= '+email);
 
-            
-
-            console.log("search= ",search);
-
+            // validation 
+            if(!email){
+                return NextResponse.json({message:"email both is required"},{status:400});
+            }
             const trimmedSearch = search.trim();
-            
-            const coupons = await Coupons.find({couponCode:{$regex:trimmedSearch,$options:"i"}});
-            // console.log("fetched searched coupons= ",coupons);
+
+            const coupons = await Coupons.find({couponCode:{$regex:trimmedSearch,$options:"i"},redeemedByEmail:email});
+            console.log("fetched user searched coupons= ",coupons);
             return NextResponse.json({message:coupons},{status:200});
     }
     catch(error){

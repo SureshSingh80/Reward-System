@@ -12,38 +12,39 @@ export async function GET(request){
         if(!sort)
             return NextResponse.json({message:"Sorting is required"},{status:400});
 
+        const trimedSort = sort.trim();
         let sortedCoupons;
         // ascending order (rewards points)
 
-        if(sort=='ascending'){
+        if(trimedSort=='ascending'){
             sortedCoupons = await Coupons.find().sort({rewardsPoint:1});
             console.log("ascending sortedCoupons= ",sortedCoupons);
             
         }
 
         // descending order (rewards points)
-        if(sort=='descending'){
+        if(trimedSort=='descending'){
             sortedCoupons = await Coupons.find().sort({rewardsPoint:-1});
             // console.log(" descending sortedCoupons= ",sortedCoupons);
             
         }
 
         // newest (latest created coupons)
-        if(sort=='newest'){
+        if(trimedSort=='newest'){
             sortedCoupons = await Coupons.find().sort({createdAt:-1});
             // console.log(" newest sortedCoupons= ",sortedCoupons);
             
         }
 
         // oldest (created first to last)
-        if(sort=='oldest'){
+        if(trimedSort=='oldest'){
             sortedCoupons = await Coupons.find().sort({createdAt:1});
             // console.log(" oldest sortedCoupons= ",sortedCoupons);
             
         }
 
         // natural insertion order (default order)
-        if(sort=='default'){
+        if(trimedSort=='default'){
             sortedCoupons = await Coupons.find({});
             // console.log(" default sortedCoupons= ",sortedCoupons);
             

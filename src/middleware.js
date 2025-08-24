@@ -8,7 +8,7 @@ export async function middleware(request) {
   const isAdminPath = path.startsWith("/admin");
 
   //   console.log("token in middleware=",token);
-  console.log("adminToken in middleware=", adminToken);
+  // console.log("adminToken in middleware=", adminToken);
 
   const isPublicPath =
     path === "/login" ||
@@ -16,14 +16,15 @@ export async function middleware(request) {
     path === "/"
 
   
-
+   // for admin route protection
   if (isAdminPath && path !== "/admin/login" && !adminToken) {
-    console.log("admin middleware working...");
+    // console.log("admin middleware working...");
     return NextResponse.redirect(new URL("/admin/login", request.url));
   }
 
+   // for customer route protection
  if (!isAdminPath && !isPublicPath && !token) {
-    console.log("customer middleware working...");
+    // console.log("customer middleware working...");
     return NextResponse.redirect(new URL("/login", request.url));
   }
 

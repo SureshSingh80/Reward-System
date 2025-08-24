@@ -32,7 +32,7 @@ export async function POST(request){
          httpOnly:true, // prevent access to javascript (client-side)
         //  secure:true,
          sameSite:"lax",
-         maxAge:3600, // token expires in 1 hour
+         maxAge:60*60*24, // token expires in 1 day
          path:'/' // cookie will be sent to all routes
      });
      return response;

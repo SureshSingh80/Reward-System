@@ -11,6 +11,7 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { auth } from '@/lib/firebaseConfig';
 import Link from 'next/link';
 import { getIdToken } from 'firebase/auth';
+import axios from 'axios';
 
 
 
@@ -57,8 +58,9 @@ const Login = () => {
              if(auth.currentUser){
                const token = await getIdToken(auth.currentUser);
 
-               // Set token in cookie 
-              document.cookie = `token=${token}; path=/; secure; samesite=lax`    
+               // Set token in cookie (max age 7 days)
+               await axios.post('/api/set-token',{token});
+                
              }
 
             router.push('/?coupon_code='+couponCode);

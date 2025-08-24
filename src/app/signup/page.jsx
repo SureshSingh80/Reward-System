@@ -67,8 +67,8 @@ const SignUp = () => {
         if (auth.currentUser) {
           const token = await getIdToken(auth.currentUser);
 
-          // Set token in cookie
-          document.cookie = `token=${token}; path=/; secure; samesite=lax`;
+          // Set token in cookie (max age 7 days)
+          await axios.post("/api/set-token", { token });
         }
 
         //  api to store data in backend

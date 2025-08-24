@@ -6,7 +6,6 @@ const AdminToolBar = ({setCoupons}) => {
   const [searchTerm,setSearchTerm] = useState("");
   const [deBoundecedSearch,setDeBoundecedSearch] = useState(searchTerm);
 
-
   // handle filtering data
   const handleFilterChange = async(e) => {
     const filter = e.target.value;
@@ -87,7 +86,8 @@ const AdminToolBar = ({setCoupons}) => {
           <div className="flex items-center gap-2">
             <span className=" w-full text-gray-600 font-medium">Filter:</span>
              
-            <select onChange={handleFilterChange} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+            <select  onChange={handleFilterChange} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+              <option value="">---Select---</option>
               <option value="all">All</option>
               <option value="claimed">Claimed</option>
               <option value="unclaimed">Unclaimed</option>
@@ -98,7 +98,8 @@ const AdminToolBar = ({setCoupons}) => {
           <div className="flex items-center gap-2">
             <span className="w-full  text-gray-600 font-medium">Sort by:</span>
             <select onChange={handleSorting} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ">
-              <option value='default'>Created At (Default)</option>
+              <option value="">---Select---</option>
+              <option value='default'>Created At</option>
               <option value="ascending">Ascending</option>
               <option value="descending">Descending</option>
               <option value="newest">Newest</option>
