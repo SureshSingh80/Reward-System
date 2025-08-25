@@ -232,6 +232,7 @@ const ShowCoupon = () => {
         setDeletePopUp={setDeletePopUp}
         error={error}
         setError={setError}
+        setCoupons={setCoupons}
       />
     </>
   );

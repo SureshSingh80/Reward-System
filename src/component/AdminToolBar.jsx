@@ -1,46 +1,69 @@
 import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import React, { use, useEffect, useState } from 'react'
 
 const AdminToolBar = ({setCoupons}) => {
 
   const [searchTerm,setSearchTerm] = useState("");
   const [deBoundecedSearch,setDeBoundecedSearch] = useState(searchTerm);
+  const [filter,setFilter] = useState("");
+  const [sort,setSort] = useState("");
 
   // handle filtering data
   const handleFilterChange = async(e) => {
-    const filter = e.target.value;
+    
+   setFilter(e.target.value);
+   setSort("");
+   
 
-    // validation for filter
-    if(!filter){
-      console.log("filter input is required");
-      return;
-    }
-    try {
-         const filteredData = await axios.get(`/api/admin/fetch-filtered-coupons?filter=${filter}`);
-         console.log(filteredData.data.message);
-         setCoupons(filteredData.data.message);
-    } catch (error) {
-       console.log("Error in fetching filtered coupons",error);
-    }
+   
   };
+
+  useEffect(()=>{
+       const fetchFilteredCoupons = async ()=>{
+             // validation for filter
+          if(!filter){
+            console.log("filter input is required");
+            return;
+          }
+          try {
+              const filteredData = await axios.get(`/api/admin/fetch-filtered-coupons?filter=${filter}`);
+              console.log(filteredData.data.message);
+              setCoupons(filteredData.data.message);
+          } catch (error) {
+            console.log("Error in fetching filtered coupons",error);
+          }
+       }
+
+       fetchFilteredCoupons();
+  },[filter]);
 
   // handle sorting data
   const handleSorting = async(e) => {
-    const sort = e.target.value;
-
-    if(!sort){
-      console.log("Sort input is required");
-      return;
-    }
-
-    try {
-         const filteredData = await axios.get(`/api/admin/fetch-sorting-coupons?sort=${sort}`);
-         console.log(filteredData.data.message);
-         setCoupons(filteredData.data.message);
-    } catch (error) {
-       console.log("Error in fetching filtered coupons",error);
-    }
+   
+    setSort(e.target.value);
+    setFilter("");
+    
+    
   }
+
+  useEffect(()=>{
+      const fetchSortedCoupons = async ()=>{
+          if(!sort){
+            console.log("Sort input is required");
+            return;
+          }
+
+          try {
+              const filteredData = await axios.get(`/api/admin/fetch-sorting-coupons?sort=${sort}`);
+              console.log(filteredData.data.message);
+              setCoupons(filteredData.data.message);
+          } catch (error) {
+            console.log("Error in fetching filtered coupons",error);
+          }
+      }
+
+      fetchSortedCoupons();
+  },[sort]);
   // handle searching
 
   useEffect(()=>{
@@ -84,9 +107,9 @@ const AdminToolBar = ({setCoupons}) => {
 
           {/* Filter Feature */}
           <div className="flex items-center gap-2">
-            <span className=" w-full text-gray-600 font-medium">Filter:</span>
+            <span  className=" w-full text-gray-600 font-medium">Filter:</span>
              
-            <select  onChange={handleFilterChange} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
+            <select value={filter}  onChange={handleFilterChange} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-green-400">
               <option value="">---Select---</option>
               <option value="all">All</option>
               <option value="claimed">Claimed</option>
@@ -97,7 +120,7 @@ const AdminToolBar = ({setCoupons}) => {
           {/* Sort Feature */}
           <div className="flex items-center gap-2">
             <span className="w-full  text-gray-600 font-medium">Sort by:</span>
-            <select onChange={handleSorting} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ">
+            <select value={sort} onChange={handleSorting} className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ">
               <option value="">---Select---</option>
               <option value='default'>Created At</option>
               <option value="ascending">Ascending</option>

@@ -139,7 +139,7 @@ const dashboard = () => {
                     </div>
 
                     <div className="flex justify-center mt-2">
-                      <button className="bg-green-500 text-white px-4 py-1 rounded-lg hover:bg-green-600">
+                      <button className="bg-orange-500 text-white px-4 py-1 rounded-lg hover:bg-orange-600">
                         Verify
                       </button>
                     </div>

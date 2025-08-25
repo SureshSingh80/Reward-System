@@ -1,18 +1,23 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 
-const DeletePopUp = ({deletePopUp,setDeletePopUp,deletableData,error,setError}) => {
+const DeletePopUp = ({deletePopUp,setDeletePopUp,deletableData,error,setError,setCoupons}) => {
 
+  const [loading,setLoading] = useState(false);
   const handleDelete = async () => {
+      setLoading(true);
+      
       try {
          const res = await axios.delete(`/api/admin/delete-coupon`,{data:{id:deletableData._id}});
          console.log(res.data);
          setDeletePopUp(false);
-         window.location.reload();
+         setCoupons(prevCoupons => prevCoupons.filter(coupon => coupon._id !== deletableData._id));
+         setLoading(false);
       } catch (error) {
          console.log(error.response.data.message);
          setError(error.response.data.message);
+         setLoading(false);
       }
   }
   return (
@@ -39,7 +44,7 @@ const DeletePopUp = ({deletePopUp,setDeletePopUp,deletableData,error,setError}) 
 
           {/* choice for delete */}
           <div>
-            <button onClick={handleDelete} className="bg-red-500 text-white py-2 px-4 rounded-md mr-2 cursor-pointer active:scale-95">Delete</button>
+            <button onClick={handleDelete} className="bg-red-500 text-white py-2 px-4 rounded-md mr-2 cursor-pointer active:scale-95">{loading ? "Deleting..." : "Delete"}</button>
             <button onClick={()=>setDeletePopUp(false)} className="bg-gray-500 text-white py-2 px-4 rounded-md cursor-pointer active:scale-95">Cancel</button>
           </div>
 

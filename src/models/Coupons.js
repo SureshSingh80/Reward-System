@@ -22,6 +22,14 @@ const couponSchema = new Schema({
     redeemedByEmail:{
         type:String
     },
+    isVerified: {
+        type: Boolean,
+        default: false
+    },
+    verifiedAt: {
+        type: Date,
+        default: null
+    },
     createdAt:{
         type:Date,
         default:Date.now
