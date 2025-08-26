@@ -71,7 +71,7 @@ export default function Home() {
          console.log(res);
          setIsSubmitting(false);
          toast.success("Coupon redeemed successfully");
-         router.push('/dashboard');
+         router.push('/show-coupons');
 
       } catch (error) {
          setIsSubmitting(false);
@@ -82,6 +82,15 @@ export default function Home() {
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
+      
+      {/* Dashboard Button (Top-right corner) */}
+      <div className="absolute top-24 right-4">
+        <Link href="/dashboard">
+          <button className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 transition">
+            Dashboard
+          </button>
+        </Link>
+      </div>
       <ToastContainer/>
       {console.log("user== ",user)}
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 flex flex-col items-center">
@@ -93,6 +102,8 @@ export default function Home() {
           className="mb-6"
         />
         <h1 className="text-2xl font-bold mb-2 text-gray-800">Welcome to  Rewards!</h1>
+        <h1 className="sm:text-xl  font-bold mb-2 text-gray-900">  Hello <span className="text-orange-600">{currentUser?.name}</span>, <span className="text-gray-600 italic">glad to see you!</span> 🌟
+</h1>
         { loading ? (
           <div className="text-blue-500 font-semibold"></div>
         ) : user ? (

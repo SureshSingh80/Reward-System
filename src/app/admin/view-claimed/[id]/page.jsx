@@ -161,6 +161,13 @@ const page = () => {
                   <p>{claimedCoupon?.redeemedBy?._id}</p>
                 </div>
 
+                {/* Verify Status */}
+                <div className="flex justify-between w-full relative mt-4">
+                  <p className="text-gray-500">Verify:</p>
+                  <p>{claimedCoupon?.isVerified ? "Verified" : "Not Verified"}</p>
+                  
+                </div>
+
                 {/* Customer Information */}
                 <div className="flex justify-between w-full relative mt-4 text-gray-500 font-bold">
                   <p>Customer Information</p>

@@ -10,7 +10,7 @@ export async function GET(request){
 
             
 
-            console.log("search= ",search);
+            // console.log("search= ",search);
 
             const trimmedSearch = search.trim();
             

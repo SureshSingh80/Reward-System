@@ -39,7 +39,7 @@ const Navbar = () => {
 
   return (
     
-    <div className="bg-blue-400 p-3 flex justify-between">
+    <div className="bg-blue-400 p-3 flex justify-between sticky top-0 z-50">
       
       <div className="flex items-center mr-3">
         <Link href="/" className="text-white ml-2">

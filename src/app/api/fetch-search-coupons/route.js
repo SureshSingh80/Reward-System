@@ -17,7 +17,7 @@ export async function GET(request){
             const trimmedSearch = search.trim();
 
             const coupons = await Coupons.find({couponCode:{$regex:trimmedSearch,$options:"i"},redeemedByEmail:email});
-            console.log("fetched user searched coupons= ",coupons);
+            // console.log("fetched user searched coupons= ",coupons);
             return NextResponse.json({message:coupons},{status:200});
     }
     catch(error){

@@ -52,7 +52,7 @@ const CustomerToolBar = ({claimedCoupons,setClaimedCoupons,email}) => {
   }
 
   return (
-    <div className="mt-2 sticky top-0 z-10 bg-white shadow-md p-3   flex flex-col sm:flex-row sm:items-center sm:justify-evenly gap-3 w-full">
+    <div className="mt-2 sticky top-16 z-10 bg-white shadow-md p-3   flex flex-col sm:flex-row sm:items-center sm:justify-evenly gap-3 w-full">
 
           {/* Search Feature */}
           <div className="flex items-center gap-2 w-full sm:w-auto">

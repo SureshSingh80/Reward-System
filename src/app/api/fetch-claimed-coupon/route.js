@@ -7,14 +7,14 @@ export async function GET(request){
             await dbConnect();
             const {searchParams} = new URL(request.url);
             const email = searchParams.get("email");
-            console.log("email = ",email);
+            console.log("email =",email);
 
             // validation
             if(!email)
                   return NextResponse.json({message:"Email is required"},{status:400});
 
             const coupons = await Coupons.find({redeemedByEmail:email,isClaimed:true});
-            console.log("claimed coupons for email= ",coupons);
+            // console.log("claimed coupons for email= ",coupons);
 
             return NextResponse.json({message:coupons},{status:200});
 
