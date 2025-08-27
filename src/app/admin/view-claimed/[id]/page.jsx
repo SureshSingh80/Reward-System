@@ -1,7 +1,7 @@
 "use client";
 import Loader from "@/component/Loader";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import EmailIcon from "@mui/icons-material/Email";
@@ -20,6 +20,9 @@ const page = () => {
   const [claimedCouponDeletePopUp, setClaimedCouponDeletePopUp] =
     useState(false);
   const [typedCouponCode, setTypedCouponCode] = useState("");
+  const [isVerified, setIsVerfied] = useState(false);
+
+  const router = useRouter();
 
   useEffect(() => {
     console.log("id in viewclaimed", params.id);
@@ -40,20 +43,20 @@ const page = () => {
   }, []);
 
   // verify token for admin
-  // useEffect(() => {
-  //   const checkAdminAuth = async () => {
-  //     try {
-  //       const res = await axios.get("/api/admin/verify-token");
-  //       console.log("response from verify Token=", res.data);
-  //       setIsVerfied(true);
-  //     } catch (error) {
-  //       console.log(error.response.data);
-  //       setIsVerfied(false);
-  //       router.push("/admin/login");
-  //     }
-  //   };
-  //   checkAdminAuth();
-  // }, []);
+  useEffect(() => {
+    const checkAdminAuth = async () => {
+      try {
+        const res = await axios.get("/api/admin/verify-token");
+        console.log("response from verify Token=", res.data);
+        setIsVerfied(true);
+      } catch (error) {
+        console.log(error.response.data);
+        setIsVerfied(false);
+        router.push("/admin/login");
+      }
+    };
+    checkAdminAuth();
+  }, []);
 
   const handleCopy = (value) => {
     if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -237,7 +240,7 @@ const page = () => {
               </div>
             </div>
           </div>
-        ) : loading ? (
+        ) : loading || !isVerified ? (
           <Loader />
         ) : (
           <div className="flex flex-col items-center justify-center bg-white shadow-md rounded-lg p-6 w-full max-w-md mx-auto">

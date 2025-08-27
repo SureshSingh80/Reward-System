@@ -1,6 +1,6 @@
 "use client";
 import axios from "axios";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Loader from "@/component/Loader";
 import QRCode from "qrcode";
@@ -12,6 +12,8 @@ const page = () => {
   const [qrImage, setQrImage] = useState();
   const [loading, setLoading] = useState(true);
   const [printPopUp,setPrintPopUp] = useState(false);
+  const [isVerified, setIsVerfied] = useState(false);
+  const router = useRouter();
   //  const [qrUrl,setQrUrl] = useState()
 
   useEffect(() => {
@@ -35,20 +37,20 @@ const page = () => {
   }, []);
 
   // verify token for admin
-  // useEffect(() => {
-  //   const checkAdminAuth = async () => {
-  //     try {
-  //       const res = await axios.get("/api/admin/verify-token");
-  //       console.log("response from verify Token=", res.data);
-  //       setIsVerfied(true);
-  //     } catch (error) {
-  //       console.log(error.response.data);
-  //       setIsVerfied(false);
-  //       router.push("/admin/login");
-  //     }
-  //   };
-  //   checkAdminAuth();
-  // }, []);
+  useEffect(() => {
+    const checkAdminAuth = async () => {
+      try {
+        const res = await axios.get("/api/admin/verify-token");
+        console.log("response from verify Token=", res.data);
+        setIsVerfied(true);
+      } catch (error) {
+        console.log(error.response.data);
+        setIsVerfied(false);
+        router.push("/admin/login");
+      }
+    };
+    checkAdminAuth();
+  }, []);
 
   const generateQR = async () => {
     try {
@@ -61,7 +63,7 @@ const page = () => {
     }
   };
 
-  return loading ? (
+  return loading || !isVerified ? (
     <Loader />
   ) : (
     <div>

@@ -19,7 +19,7 @@ const ClientAuthWatcher = () => {
                 await axios.post('/api/clear-token');
                
             }
-            
+            console.log("Executing onIdTokenChanged");
         });
 
         return () => unsubscribe();

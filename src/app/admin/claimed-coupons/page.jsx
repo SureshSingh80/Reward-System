@@ -8,27 +8,32 @@ import PreviewIcon from "@mui/icons-material/Preview";
 import Loader from '@/component/Loader';
 import { useRouter } from 'next/navigation';
 
-// verify token for admin
-  // useEffect(() => {
-  //   const checkAdminAuth = async () => {
-  //     try {
-  //       const res = await axios.get("/api/admin/verify-token");
-  //       console.log("response from verify Token=", res.data);
-  //       setIsVerfied(true);
-  //     } catch (error) {
-  //       console.log(error.response.data);
-  //       setIsVerfied(false);
-  //       router.push("/admin/login");
-  //     }
-  //   };
-  //   checkAdminAuth();
-  // }, []);
+
 
 const page = () => {
 
-    const [loading,setLoading] = useState(true);
+   const [loading,setLoading] = useState(true);
     const [coupons,SetCoupons] = useState([]);
+    const [isVerfied, setIsVerfied] = useState(false);
     const router = useRouter();
+
+  // verify token for admin
+  useEffect(() => {
+    const checkAdminAuth = async () => {
+      try {
+        const res = await axios.get("/api/admin/verify-token");
+        console.log("response from verify Token=", res.data);
+        setIsVerfied(true);
+      } catch (error) {
+        console.log(error.response.data);
+        setIsVerfied(false);
+        router.push("/admin/login");
+      }
+    };
+    checkAdminAuth();
+  }, []);
+
+   
 
     useEffect(()=>{
         const fetchClaimedCoupons = async () => {
@@ -48,7 +53,7 @@ const page = () => {
   return (
     <>
       {
-        loading ? <Loader/> : (
+        loading || !isVerfied ? <Loader/> : (
             <div className='flex flex-col  items-center  min-h-screen bg-gray-200 px-4 text-black'>
                 <h1 className="text-2xl font-bold mb-2 text-gray-800 mt-4">Claimed Coupons</h1>
                 {coupons && coupons.length > 0 ? (

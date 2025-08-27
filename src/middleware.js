@@ -37,6 +37,7 @@ export const config = {
     "/",
     "/profile",
     "/dashboard",
+    "/show-coupons",
     "/help",
     "/admin/:path*", // ✅ everything under /admin/*
   ],
