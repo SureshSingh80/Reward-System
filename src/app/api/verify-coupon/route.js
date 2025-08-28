@@ -1,5 +1,6 @@
 import { dbConnect } from "@/lib/dbConnect";
 import Coupons from "@/models/Coupons";
+import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function POST(request){
@@ -20,11 +21,21 @@ export async function POST(request){
 
         if (coupon.isVerified) {
             return NextResponse.json({ message: "Coupon is already verified" },{ status: 400 });
-    }
+       }
 
         // update isVerified and verifiedAt 
         const updatedCoupon = await Coupons.findOneAndUpdate({couponCode:couponCode,redeemedByEmail:email},{$set:{isVerified:true,verifiedAt:new Date()}},{new:true});
         console.log("updatedCoupon= ",updatedCoupon);
+
+        // ✅ success email trigger
+        const status = await axios.post("https://fastapi.ameegolabs.com/webhook-test/send-verification-email", {
+            email,
+            couponCode,
+            status: "success",
+            message: "Coupon verified successfully"
+        });
+
+        console.log("status= ",status);
 
         return NextResponse.json({message:"Coupon verified successfully",data:updatedCoupon},{status:200});
     } catch (error) {
