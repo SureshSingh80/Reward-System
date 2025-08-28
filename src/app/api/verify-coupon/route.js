@@ -28,14 +28,14 @@ export async function POST(request){
         console.log("updatedCoupon= ",updatedCoupon);
 
         // ✅ success email trigger
-        const status = await axios.post("https://fastapi.ameegolabs.com/webhook-test/send-verification-email", {
+        const status = await axios.post("https://fastapi.ameegolabs.com/webhook/send-verification-email", {
             email,
             couponCode,
             status: "success",
             message: "Coupon verified successfully"
         });
 
-        console.log("status= ",status);
+        // console.log("email send with n8n status= ",status);
 
         return NextResponse.json({message:"Coupon verified successfully",data:updatedCoupon},{status:200});
     } catch (error) {
