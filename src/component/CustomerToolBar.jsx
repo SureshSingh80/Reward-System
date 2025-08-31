@@ -72,7 +72,9 @@ const CustomerToolBar = ({claimedCoupons,setClaimedCoupons,email}) => {
             <select onChange={handleSorting}  className="w-64 sm:w-auto  border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-400 ">
               <option value="">---Select---</option>
               <option value="ascending">Ascending</option>
-              <option value="descending">Descending</option>            
+              <option value="descending">Descending</option>
+              <option value="unverified">Unverified</option>            
+              <option value="verified">Verified</option>
             </select>
           </div>
         </div>

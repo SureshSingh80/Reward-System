@@ -14,7 +14,8 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CouponNotFound from "@/component/CouponNotFound";
 import { useRouter } from "next/navigation";
-import { CheckCircle, ShieldCheck } from "lucide-react";
+import { CheckCircle, ShieldCheck, Clock } from "lucide-react";
+
 
 const dashboard = () => {
   const router = useRouter();
@@ -28,24 +29,24 @@ const dashboard = () => {
   const [verifyingCouponId, setVerifyingCouponId] = useState(null);
   const [claimedCoupons, setClaimedCoupons] = useState([]);
 
-  useEffect(() => {
-    const verifyToken = async () => {
-      try {
-        const res = await axios.post("/api/verifyToken");
-        console.log("useEffect running", res);
-        if (res.status === 200) {
-          console.log("Token is valid");
-        }
-      } catch (error) {
-        console.log("Error in verficatoin=", error.response.data);
-        await logOut(auth);
-        // Clear the token cookie
-        await axios.post("/api/clear-token");
-        window.location.href = "/login";
-      }
-    };
-    verifyToken();
-  }, []);
+  // useEffect(() => {
+  //   const verifyToken = async () => {
+  //     try {
+  //       const res = await axios.post("/api/verifyToken");
+  //       console.log("useEffect running", res);
+  //       if (res.status === 200) {
+  //         console.log("Token is valid");
+  //       }
+  //     } catch (error) {
+  //       console.log("Error in verficatoin=", error.response.data);
+  //       await logOut(auth);
+  //       // Clear the token cookie
+  //       await axios.post("/api/clear-token");
+  //       window.location.href = "/login";
+  //     }
+  //   };
+  //   verifyToken();
+  // }, []);
 
   // useEffect for fetching claimed coupon
   useEffect(() => {
@@ -106,7 +107,7 @@ const dashboard = () => {
       // convert isVerfied to true for this couponCode
       const updatedClaimedCoupons = claimedCoupons.map((coupon) => {
         if (coupon.couponCode === couponCode) {
-          return { ...coupon, isVerified: true };
+          return { ...coupon, isVerified: true, verifiedAt: new Date() };
         }
         return coupon;
       });
@@ -213,13 +214,30 @@ const dashboard = () => {
                       </span>
                     </div>
                     <div className="flex justify-around items-center">
-                      <PreviewIcon
-                        sx={{ fontSize: 25 }}
-                        onClick={() =>
-                          router.push(`/admin/view-coupon/${coupon._id}`)
-                        }
-                        className="mr-2 text-blue-400 cursor-pointer"
-                      />
+                      {
+                        coupon.isVerified ? (
+                          <div className="flex items-center gap-2 text-green-600 text-sm font-medium">
+                            <CheckCircle size={16} />
+                            <span>
+                              Verified on{"- "}
+                              <i className="text-gray-700">
+                                {new Date(coupon?.verifiedAt).toLocaleDateString("en-GB")}
+                              </i>
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-2 text-yellow-600 text-sm font-medium">
+                            <Clock size={16} />
+                            <span>
+                              Claimed on{"- "}
+                              <i className="text-gray-700">
+                                {new Date(coupon?.redeemedAt).toLocaleDateString("en-GB")}
+                              </i>
+                            </span>
+                          </div>
+                        )
+                      }
+                     
                     </div>
                   </div>
                 </div>

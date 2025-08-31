@@ -30,7 +30,7 @@ export async function POST(request){
         }
 
         // redeem the coupon (search by coupon code , update redemmedbyEmail, redemmedbyObject and isClaimed)
-        const coupon = await Coupons.findOneAndUpdate({couponCode:couponCode},{$set:{redeemedByEmail:email,redeemedBy:_id,isClaimed:true}},{new:true});
+        const coupon = await Coupons.findOneAndUpdate({couponCode:couponCode},{$set:{redeemedByEmail:email,redeemedBy:_id,isClaimed:true,redeemedAt:new Date()}},{new:true});
         console.log("coupon= ",coupon);
         if(!coupon){
             console.log("Coupon not found");

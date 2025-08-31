@@ -7,6 +7,7 @@ import { auth } from "@/lib/firebaseConfig";
 import { logOut } from "@/lib/auth";
 import { ModeToggle } from "./ThemeToggle";
 import axios from "axios";
+import NoticationBell from "./NotificationBell";
 
 const Navbar = () => {
   const { user, loading } = useAuth();
@@ -50,13 +51,16 @@ const Navbar = () => {
       <div className="flex">
         {user ? (
           <>
-            <button
+          <NoticationBell/>
+           <div>
+             <button
               style={{ cursor: "pointer" }}
               onClick={handleLogout}
               className="mr-3 bg-white text-black px-3 py-2 rounded-lg"
             >
               Logout
             </button>
+           </div>
           </>
         ) : (
           <>

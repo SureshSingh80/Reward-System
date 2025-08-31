@@ -29,6 +29,13 @@ const CustomerSchema = new Schema({
       },
     ],
   },
+  notification:[{
+      title: String,
+      message: String,
+      type: { type: String, enum: ["info", "success", "warning"] },
+      isRead: { type: Boolean, default: false },
+      createdAt: { type: Date, default: Date.now }
+    }],
   totalPoints: {
       type: Number,
       default:0  

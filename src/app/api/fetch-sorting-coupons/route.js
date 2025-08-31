@@ -36,6 +36,19 @@ export async function GET(request){
             
         }
 
+        // vefied coupon 
+        if(trimedSort==='verified'){
+            sortedCoupons = await Coupons.find({redeemedByEmail:email,isClaimed:true,isVerified:true});
+            // console.log(" verified sortedCoupons= ",sortedCoupons);            
+        }
+
+        // unverified coupon 
+        if(trimedSort==='unverified'){
+            sortedCoupons = await Coupons.find({redeemedByEmail:email,isClaimed:true,isVerified:false});
+            // console.log(" unverified sortedCoupons= ",sortedCoupons);
+            
+        }
+
         // natural insertion order (default order)
         if(trimedSort==='default'){
             sortedCoupons = await Coupons.find({redeemedByEmail:email,isClaimed:true});

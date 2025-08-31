@@ -26,6 +26,10 @@ const couponSchema = new Schema({
         type: Boolean,
         default: false
     },
+    redeemedAt:{
+        type:Date,
+        default: null
+    },
     verifiedAt: {
         type: Date,
         default: null

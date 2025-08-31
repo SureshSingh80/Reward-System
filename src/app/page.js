@@ -81,18 +81,9 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4">
-      
-      {/* Dashboard Button (Top-right corner) */}
-      <div className="absolute top-24 right-4">
-        <Link href="/dashboard">
-          <button className="px-4 py-2 rounded-lg bg-blue-600 text-white font-semibold shadow-md hover:bg-blue-700 transition">
-            Dashboard
-          </button>
-        </Link>
-      </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 px-4 ">
       <ToastContainer/>
-      {console.log("user== ",user)}
+    
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 flex flex-col items-center">
         <Image
           src="/get-rewarded.jpg" // Place a happy smile image in your /public folder
@@ -101,12 +92,12 @@ export default function Home() {
           alt="Happy customer"
           className="mb-6"
         />
-        <h1 className="text-2xl font-bold mb-2 text-gray-800">Welcome to  Rewards!</h1>
-        <h1 className="sm:text-xl  font-bold mb-2 text-gray-900">  Hello <span className="text-orange-600">{currentUser?.name}</span>, <span className="text-gray-600 italic">glad to see you!</span> 🌟
-</h1>
-        { loading ? (
-          <div className="text-blue-500 font-semibold"></div>
-        ) : user ? (
+        <h1 className="text-2xl font-bold mb-2 text-gray-800 italic">Welcome to  Rewards!</h1>
+        <h1 className="sm:text-xl  font-bold mb-2 text-gray-900 italic">  Hello <span className="text-orange-600">{currentUser?.name}</span>, <span className="text-gray-600 ">glad to see you!</span> 🌟
+        </h1>
+        { loading  ? (
+          <div className="text-blue-500 font-semibold">Loading....</div>
+        ) : user  ? (
           <div className="text-green-500 font-semibold">Click On Reedom Coupon To Get Your Rewards</div>
         ) : (
           <div className="text-red-500 font-semibold">You are not logged in</div>
@@ -114,11 +105,12 @@ export default function Home() {
         }
        
 
-        {loading ? (
+        {loading || (!currentUser?.name && user) ? (
           <div className="text-blue-500 font-semibold">
             <div className="w-8 h-8 border-4 border-gray-300 border-t-transparent rounded-full animate-spin" />
           </div>
         ) : user ? (
+          <>
            <form onSubmit={handleRedeemedent} className="w-full flex flex-col items-center">
           <input
             type="text"
@@ -137,6 +129,16 @@ export default function Home() {
            {submitting ?<ClipLoader size={20} color="#fff" /> : "Redeem Coupon"}
           </button>
         </form>
+        
+        
+      <div className="w-full  mt-2">
+        <Link href="/dashboard">
+          <button className="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition cursor-pointer shadow-md w-full">
+            Go to Dashboard
+          </button>
+        </Link>
+      </div>
+      </>
         ) : (
           <div className="w-full flex flex-col items-center">
             <p className="text-red-500 mb-3 font-semibold">

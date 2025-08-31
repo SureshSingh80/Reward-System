@@ -6,12 +6,13 @@ import { LogOut } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { ClipLoader } from "react-spinners";
 
+
 const page = () => {
   const [couponCode, setCouponCode] = useState("");
   const [rewardsPoint, setRewardsPoint] = useState();
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-  const [isVerified, setIsVerfied] = useState(false);
+
   const router = useRouter();
 
   function generateRandomCode(length = 8) {
@@ -67,32 +68,12 @@ const page = () => {
     window.location.href = "/admin/show-coupons";
   };
 
-  // verify token for admin
-  useEffect(() => {
-    const checkAdminAuth = async () => {
-      try {
-        const res = await axios.get("/api/admin/verify-token");
-        console.log("response from verify Token=", res.data);
-        setIsVerfied(true);
-      } catch (error) {
-        console.log(error.response.data);
-        setIsVerfied(false);
-        router.push("/admin/login");
-      }
-    };
-    checkAdminAuth();
-  }, []);
+ 
   return (
     <>
       <ToastContainer />
-      {!isVerified ? (
-        <div className="flex flex-col justify-center items-center  min-h-screen bg-gray-100  text-black">
-          <div className="text-blue-500 font-semibold">
-            <div className="w-20 h-20 border-4 border-gray-900 border-t-transparent rounded-full animate-spin" />
-          </div>
-          <p className="mt-4">please wait...</p>
-        </div>
-      ) : (
+      
+     
         <div className="flex flex-col justify-center items-center  min-h-screen bg-gray-50 px-4 text-black  ">
           {/* logout button */}
           <div className="fixed top-4 right-4">
@@ -203,7 +184,7 @@ const page = () => {
             </button>
           </div>
         </div>
-      )}
+     
     </>
   );
 };
