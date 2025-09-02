@@ -15,6 +15,7 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import CouponNotFound from "@/component/CouponNotFound";
 import { useRouter } from "next/navigation";
 import { CheckCircle, ShieldCheck, Clock } from "lucide-react";
+import { Copy, fetchClaimedCoupon, verifyCoupon } from "@/utils/user/fetchClaimedCoupon";
 
 
 const dashboard = () => {
@@ -29,96 +30,53 @@ const dashboard = () => {
   const [verifyingCouponId, setVerifyingCouponId] = useState(null);
   const [claimedCoupons, setClaimedCoupons] = useState([]);
 
-  // useEffect(() => {
-  //   const verifyToken = async () => {
-  //     try {
-  //       const res = await axios.post("/api/verifyToken");
-  //       console.log("useEffect running", res);
-  //       if (res.status === 200) {
-  //         console.log("Token is valid");
-  //       }
-  //     } catch (error) {
-  //       console.log("Error in verficatoin=", error.response.data);
-  //       await logOut(auth);
-  //       // Clear the token cookie
-  //       await axios.post("/api/clear-token");
-  //       window.location.href = "/login";
-  //     }
-  //   };
-  //   verifyToken();
-  // }, []);
 
   // useEffect for fetching claimed coupon
   useEffect(() => {
-    const fetchClaimedCoupon = async () => {
-      try {
-        const res = await axios.get(
-          "/api/fetch-claimed-coupon?email=" + user.email
-        );
-        console.log("claimed coupon response", res.data.message);
-        setClaimedCoupons(res.data.message);
-        setLoader(false);
-      } catch (error) {
-        console.log(error);
-        setLoader(false);
+    const getClaimedCoupon = async () => {
+      const result = await fetchClaimedCoupon(user.email);
+      console.log("result for claimed coupon= ",result);
+
+      if(result?.success){
+          setClaimedCoupons(result.coupons);
+          setLoader(false);
+      }else{
+         toast.error(result.error);
+         setLoader(false);
       }
     };
 
     if (user && !loading && user.email) {
-      fetchClaimedCoupon();
+      getClaimedCoupon();
     }
   }, [user]);
 
-  const handleCopy = (value, id) => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
-        .writeText(value)
-        .then(() => {
-          setCopiedId(id);
-        })
-        .catch((error) => {
-          console.log("clipboard copy failed", error);
-          alert("Copy failed, Try manually");
-        });
-    } else {
-      alert("Clipboard not supported in this environment");
-    }
-
-    // reset copy state after 2 second
-    setTimeout(() => {
-      setCopiedId(false);
-    }, 2000);
-  };
+ 
 
   const handleVerify = async (couponCode,id) => {
     if (!couponCode || !user || !user.email) {
       toast.error("unauthorized");
       return;
     }
-    try {
       setVerifyingCouponId(id);
-      const res = await axios.post("/api/verify-coupon", {
-        couponCode: couponCode,
-        email: user.email,
-      });
-      console.log(res);
-      
-      toast.success(res.data.message);
-      // convert isVerfied to true for this couponCode
-      const updatedClaimedCoupons = claimedCoupons.map((coupon) => {
-        if (coupon.couponCode === couponCode) {
-          return { ...coupon, isVerified: true, verifiedAt: new Date() };
-        }
-        return coupon;
-      });
-      setClaimedCoupons(updatedClaimedCoupons);
-    } catch (error) {
-      console.log("error in verify coupon", error);
-      toast.error(error.response.data.message);
-       
-    } finally {
+      const result = await verifyCoupon(couponCode,user.email);
+      console.log("verifyCoupon result= ",result);
+
+      if(result?.success){
+          toast.success(result.message);
+          // convert isVerfied to true for this couponCode
+          const updatedClaimedCoupons = claimedCoupons.map((coupon) => {
+            if (coupon.couponCode === couponCode) {
+              return { ...coupon, isVerified: true, verifiedAt: new Date() };
+            }
+            return coupon;
+          });
+          setClaimedCoupons(updatedClaimedCoupons);
+      }else{
+          toast.error(result.error);
+      }
       setVerifyingCouponId(null);
-    }
+
   };
 
   return (
@@ -169,9 +127,7 @@ const dashboard = () => {
                           <ContentCopyIcon
                             sx={{ fontSize: 13 }}
                             className="cursor-pointer"
-                            onClick={() =>
-                              handleCopy(coupon.couponCode, coupon._id)
-                            }
+                            onClick={() =>Copy(coupon.couponCode,coupon._id,setCopiedId)}
                           />
                         )}
                       </span>

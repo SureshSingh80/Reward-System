@@ -5,6 +5,9 @@ import React, { useEffect, useState } from "react";
 import Loader from "@/component/Loader";
 import QRCode from "qrcode";
 import Coupon from '@/component/Coupon'
+import { viewCoupon } from "@/utils/admin/viewCoupon";
+import { toast, ToastContainer } from "react-toastify";
+import { generateQrCode } from "@/utils/admin/generateQrCode";
 
 const page = () => {
   const params = useParams(); // get parameter(id) from url
@@ -20,16 +23,14 @@ const page = () => {
     console.log(params.id);
 
     const FetchCoupon = async () => {
-      try {
-        const res = await axios.get(`/api/admin/fetch-coupon?id=${params.id}`);
-        console.log("res= ", res);
-        setCoupon(res.data);
+      const result = await viewCoupon(params.id);
+      console.log("result= ", result);
+      if (result?.success) {
+        setCoupon(result.data);
         setLoading(false);
-        console.log("Params ID=", params.id);
-      } catch (error) {
-        console.log(error);
-        console.log("Params error ID=", params.id);
+      } else {        
         setLoading(false);
+        toast.error(result.error);
       }
     };
 
@@ -38,19 +39,20 @@ const page = () => {
 
 
   const generateQR = async () => {
-    try {
-      const qr = await QRCode.toDataURL(
-        `http://localhost:3000?coupon_code=${coupon?.couponCode}`
-      );
-      setQrImage(qr);
-    } catch (error) {
-      console.log("failed to generate QR Code", error);
+    const result = await generateQrCode(coupon?.couponCode);
+    console.log("result= ", result);
+    if (result?.success) {
+      setQrImage(result.data);
+    } else {
+      toast.error(result.error);
     }
   };
 
   return loading ? (
     <Loader />
   ) : (
+    <>
+    <ToastContainer/>
     <div>
       <div className={`flex flex-col  items-center justify-center  min-h-screen bg-gray-200 px-4 text-black print:hidden ${
             printPopUp ? "blur-sm" : ""
@@ -97,6 +99,7 @@ const page = () => {
           coupon={coupon}
         />
     </div>
+    </>
   );
 };
 

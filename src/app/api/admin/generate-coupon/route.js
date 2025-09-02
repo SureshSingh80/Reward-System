@@ -12,11 +12,12 @@ export async function POST(request){
             rewardsPoint
         });
         await newCoupon.save();
+        return NextResponse.json({message:"Coupon Generated successfully"},{status:200});
      } catch (error) {
       
         console.log(error);
-        return NextResponse.json({message:"Error in creating coupon"},{status:502});
+        return NextResponse.json({message:"Error in Generating Coupon"},{status:502});
         
      }
-     return NextResponse.json({message:"coupon created successfully"},{status:200});
+     
 }

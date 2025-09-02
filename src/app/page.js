@@ -93,8 +93,15 @@ export default function Home() {
           className="mb-6"
         />
         <h1 className="text-2xl font-bold mb-2 text-gray-800 italic">Welcome to  Rewards!</h1>
-        <h1 className="sm:text-xl  font-bold mb-2 text-gray-900 italic">  Hello <span className="text-orange-600">{currentUser?.name}</span>, <span className="text-gray-600 ">glad to see you!</span> 🌟
-        </h1>
+          {currentUser?.name ? (<h1 className="sm:text-xl font-bold mb-2 text-gray-600 italic"> Hello <span className="text-orange-600">{currentUser.name}</span>{" "}
+              <span className="text-gray-600">glad to see you!</span> 🌟
+            </h1>
+          ) : null}
+
+        
+        
+        
+   
         { loading  ? (
           <div className="text-blue-500 font-semibold">Loading....</div>
         ) : user  ? (

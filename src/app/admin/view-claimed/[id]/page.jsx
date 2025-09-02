@@ -10,6 +10,8 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 import ClaimedCouponDeletePopUp from "@/component/ClaimedCouponDeletePopUp";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
+import { Copy, viewClaimedCoupon } from "@/utils/admin/viewClaimedCoupon";
+import { toast, ToastContainer } from "react-toastify";
 
 const page = () => {
   const params = useParams(); // get parameter(id) from url
@@ -22,49 +24,27 @@ const page = () => {
   const [typedCouponCode, setTypedCouponCode] = useState("");
   
 
-  const router = useRouter();
-
   useEffect(() => {
-    console.log("id in viewclaimed", params.id);
+
     const FetchCoupon = async () => {
-      try {
-        const res = await axios.get(
-          "/api/admin/fetch-claimed-coupon?id=" + params.id
-        );
-        console.log("claimed coupon response", res.data.message);
-        setClaimedCoupon(res.data.message);
+    
+
+      const result = await viewClaimedCoupon(params.id);
+      console.log("result= ", result);
+      if (result?.success) {
+        setClaimedCoupon(result.data);
         setLoading(false);
-      } catch (error) {
-        console.log(error);
+      } else {
+        toast.error(result.error);
         setLoading(false);
       }
     };
     FetchCoupon();
   }, []);
 
-
-  const handleCopy = (value) => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
-        .writeText(value)
-        .then(() => {
-          setCopied(true);
-        })
-        .catch((error) => {
-          console.log("clipboard copy failed", error);
-          alert("Copy failed, Try manually");
-        });
-    } else {
-      alert("Clipboard not supported in this environment");
-    }
-
-    // reset copy state after 2 second
-    setTimeout(() => {
-      setCopied(false);
-    }, 2000);
-  };
   return (
     <>
+     <ToastContainer/>
       <div
         className={`flex justify-center items-center min-h-screen bg-gray-100 w-full text-black ${
           claimedCouponDeletePopUp ? "blur-sm" : ""
@@ -93,9 +73,7 @@ const page = () => {
                           <ContentCopyIcon
                             sx={{ fontSize: 15 }}
                             className="cursor-pointer"
-                            onClick={() =>
-                              handleCopy(claimedCoupon?.couponCode)
-                            }
+                            onClick={() =>Copy(claimedCoupon?.couponCode,setCopied)}                     
                           />
                         )}
                       </span>
@@ -176,13 +154,13 @@ const page = () => {
                 {/* Adderss */}
                 <div className="flex justify-between w-full relative mt-4">
                   <p className="text-gray-500">Address</p>
-                  <p>{(claimedCoupon?.redeemedBy?.address ? address :'Address Not registered')}</p>
+                  <p>{(claimedCoupon?.redeemedBy?.address ? address :'Not registered')}</p>
                 </div>
 
                 {/* phoneNo. */}
                 <div className="flex justify-between w-full relative mt-4">
                   <p className="text-gray-500">Contact Number</p>
-                  <p>{(claimedCoupon?.redeemedBy?.phone ? phone :'Contact  not registered')}</p>
+                  <p>{(claimedCoupon?.redeemedBy?.phone ? phone :'Not registered')}</p>
                 </div>
 
                 {/* delete and contact button */}

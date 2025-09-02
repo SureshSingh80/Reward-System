@@ -1,8 +1,6 @@
 import { dbConnect } from "@/lib/dbConnect";
 import Coupons from "@/models/Coupons";
 import { NextResponse } from "next/server";
-
-
 import Customers from "@/models/Customers";
 
 export async function GET(request) {
@@ -25,10 +23,10 @@ export async function GET(request) {
         }
         console.log("coupon= ",coupon);
         
-        return NextResponse.json({message:coupon},{status:200});
+        return NextResponse.json({coupon},{status:200});
 
     } catch (error) {
         console.log("Faild to fetch claimed coupon" , error);
-         return NextResponse.json({message:"Failed to Fetched"},{status:500});
+         return NextResponse.json({message:"Failed to Fetch"},{status:500});
     }
 }

@@ -14,9 +14,9 @@ export async function GET(request){
         const coupon = await Coupons.findById(id);
         console.log("coupon= ",coupon);
         
-        return NextResponse.json(coupon);
+        return NextResponse.json({coupon},{status:200});
 
     } catch (error) {
-         return NextResponse.json({message:"Failed to Fetched"},{status:500})
+         return NextResponse.json({message:"Failed to view this coupon"},{status:500});
     }
 }

@@ -16,6 +16,7 @@ import { Ban } from "lucide-react";
 import CouponNotFound from "@/component/CouponNotFound";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
+import {  CopyToClipBoard, fetchCoupons } from "@/utils/admin/fetchCoupons";
 
 const ShowCoupon = () => {
   const [coupons, setCoupons] = useState(); // all avlabile coupons
@@ -38,44 +39,25 @@ const ShowCoupon = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchCoupons = async () => {
+    const fetchAllCoupons = async () => {
       setLoading(true);
-      try {
-        const res = await axios.get("/api/admin/fetch-coupons");
-          console.log(res.data);
-        setCoupons(res.data);
+      const result = await fetchCoupons();
+      console.log("fetched coupons= ",result);
+
+      if (result?.success) {
+        setCoupons(result.data);
         setLoading(false);
-      } catch (error) {
-        console.log("Error from fetch coupons", error);
+      } else {
+        toast.error(result.error);
         setLoading(false);
       }
     };
-    fetchCoupons();
+    fetchAllCoupons();
   }, []);
-
-  const handleCopy = (value,id) => {
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard
-        .writeText(value)
-        .then(() => {
-          setCopiedId(id);
-        })
-        .catch((error) => {
-          console.log("clipboard copy failed", error);
-          alert("Copy failed, Try manually");
-        });
-    } else {
-      alert("Clipboard not supported in this environment");
-    }
-
-    // reset copy state after 2 second
-    setTimeout(() => {
-      setCopiedId(false);
-    }, 2000);
-  };
 
   return (
     <>
+     <ToastContainer />
       {loading ? (
         <Loader />
       ) : (
@@ -84,7 +66,7 @@ const ShowCoupon = () => {
             editPopUp || deletePopUp ? "blur-sm" : ""
           }`}
         >
-          <ToastContainer />
+          
           
           {/* Toolbar Container for searching sorting and filter */}
          <AdminToolBar setCoupons={setCoupons}/>
@@ -121,7 +103,7 @@ const ShowCoupon = () => {
                             sx={{ fontSize: 13 }}
                             className="cursor-pointer"
                             onClick={() =>
-                              handleCopy(coupon.couponCode, coupon._id)
+                              CopyToClipBoard(coupon.couponCode,coupon._id,setCopiedId)
                             }
                           />
                         )}

@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export async function GET(request){
       try {
-         const response = NextResponse.json({message:"Logout successful"},{status:200});
+         const response = NextResponse.json({message:"Logout successfull"},{status:200});
          response.cookies.set('adminToken','',{
             path:'/',
             httpOnly:true,
@@ -12,6 +12,7 @@ export async function GET(request){
          });
          return response;
       } catch (error) {
-         return NextResponse.json({message:"Error in logging out"},{status:401});
+         console.log("error in logout",error);
+         return NextResponse.json({message:"Logout failed"},{status:401});
       }
 }

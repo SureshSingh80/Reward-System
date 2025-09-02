@@ -8,6 +8,7 @@ import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import Link from 'next/link'
 import { ClipLoader } from "react-spinners";
 import axios from 'axios'
+import { login } from '@/utils/admin/login'
 
 const AdminLogin = () => {
 
@@ -26,17 +27,19 @@ const AdminLogin = () => {
         const onSubmit = async (data) => {
         const { adminID, password } = data;
         setLoading(true);
-        try {
-          const res = await axios.post('/api/admin/admin-login',data);
+       
+
+        const result = await login(data);
+        console.log("result from login= ",login);
+
+        if (result?.success) {
           setLoading(false);
-          toast.success("Login Successful");
-          console.log("response from adminLogin= ",res.data.message);
+          toast.success(result.data);          
           router.push('/admin/dashboard');
-        } catch (error) {
+        } else {
           setLoading(false);
-          toast.error(error.response.data.message);
-          console.log(error.response.data.message);
-        }
+          toast.error(result.error);         
+         }
         
         };
   return (

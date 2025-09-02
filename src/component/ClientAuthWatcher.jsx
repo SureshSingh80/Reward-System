@@ -11,7 +11,7 @@ const ClientAuthWatcher = () => {
         // listen for changes in Firebase IDToken
         const unsubscribe =  onIdTokenChanged(auth, async(user) => {
             if(user){
-                const token = await user.getIdToken(); // fresh token
+                const token = await user.getIdToken(true); // fresh token
                 await axios.post('/api/set-token',{token});
             }
             else{

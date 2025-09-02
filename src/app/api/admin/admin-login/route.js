@@ -27,9 +27,9 @@ export async function POST(request){
      // create jwt token
      const token = jwt.sign(payload,process.env.JWT_SECRET,{expiresIn:"1h"});
 
-     const response = NextResponse.json({message:"Login successful"},{status:200});
+     const response = NextResponse.json({message:"Login successfully"},{status:200});
      response.cookies.set("adminToken",token,{
-         httpOnly:true, // prevent access to javascript (client-side)
+         httpOnly:true, // prevent access to javascript (client-side)   
         //  secure:true,
          sameSite:"lax",
          maxAge:60*60*24, // token expires in 1 day

@@ -1,17 +1,17 @@
 'use client'
-import React, { useEffect } from 'react'
+import React, { use, useEffect } from 'react'
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { signIn } from '@/lib/auth';
+
 import { toast, ToastContainer } from 'react-toastify';
-import { useRouter } from 'next/navigation';
+
 import { ClipLoader } from 'react-spinners';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { auth } from '@/lib/firebaseConfig';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { getIdToken } from 'firebase/auth';
-import axios from 'axios';
+
+import { login } from '@/utils/user/login';
 
 
 
@@ -20,7 +20,8 @@ import axios from 'axios';
 const Login = () => {
 
     const {register,handleSubmit,watch,formState:{errors}}=useForm();
-    const  router = useRouter();
+    const router = useRouter();
+    
     const [loading,setLoading]=useState(false);
     const [showPassword,setShowPassword]=useState(false);
     const [couponCode,setCouponCode] = useState('');
@@ -36,49 +37,10 @@ const Login = () => {
         setCouponCode(couponCode);
     })
     
-    const onSubmit=(data)=>{
-        const {email,password}=data;
-        // creating object
-        const customer={
-            email:email,
-            password:password
-        }
-        console.log(customer);
-
-        setLoading(true);
-
-        // firebase signin
-        signIn(email,password).then(async(userCredential)=>{
-            const user=userCredential.user;
-            console.log("user=",user);
-             setLoading(false);
-             toast.success('Login Successful');
-             
-             // check user status
-             if(auth.currentUser){
-               const token = await getIdToken(auth.currentUser);
-
-               // Set token in cookie (max age 7 days)
-               await axios.post('/api/set-token',{token});
-                
-             }
-
-            router.push('/?coupon_code='+couponCode);
-            
-        }).catch((error)=>{
-            const errorCode=error.code;
-            const errorMessage=error.message;
-            setLoading(false);
-            
-            toast.error(errorMessage);
-            console.log("errorCode=",errorCode);
-            console.log("errorMessage=",errorMessage);
-        });
-    }
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-300 px-4 " style={{backgroundImage: 'url("/login.jpg")',backgroundSize: 'cover',backgroundPosition: 'center'}}>
          <ToastContainer/>
-         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 bg-white p-8  shadow rounded-lg">
+         <form onSubmit={handleSubmit((data)=>login(data,setLoading,router,couponCode))} className="space-y-6 bg-white p-8  shadow rounded-lg">
             <h2 className="text-2xl font-bold text-center text-gray-900 " style={{ WebkitFontSmoothing: 'antialiased', MozOsxFontSmoothing: 'grayscale' }}>
               Login
             </h2>

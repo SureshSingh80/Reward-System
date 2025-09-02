@@ -7,35 +7,43 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import PreviewIcon from "@mui/icons-material/Preview";
 import Loader from '@/component/Loader';
 import { useRouter } from 'next/navigation';
+import { fetchClaimedCoupons } from '@/utils/admin/fetchClaimedCoupons';
+import { toast, ToastContainer } from 'react-toastify';
 
 
 
 const page = () => {
 
    const [loading,setLoading] = useState(true);
-    const [coupons,SetCoupons] = useState([]);
-    const [isVerfied, setIsVerfied] = useState(false);
+    const [coupons,setCoupons] = useState([]);
     const router = useRouter();   
 
+    // fetching coupons
     useEffect(()=>{
-        const fetchClaimedCoupons = async () => {
+        const getCoupons = async () => {
+
             setLoading(true);
-            try {
-              const res = await axios.get("/api/admin/fetch-claimed-coupons");
-                console.log("claimed coupons = ",res.data.coupons);
-              SetCoupons(res.data.coupons);
+            const result = await fetchClaimedCoupons();
+             console.log("result= ",result);
+            if (result?.success) {
+              
+              setCoupons(result.coupons);  // ✅ only set when valid
               setLoading(false);
-            } catch (error) {
-              console.log("Error from fetch coupons", error);
+            } else {
+              toast.error(result.error);
               setLoading(false);
             }
+           
+            
         }
-        fetchClaimedCoupons();
+        getCoupons();
     },[])
   return (
     <>
+      <ToastContainer/>
       {
         loading ? <Loader/> : (
+            
             <div className='flex flex-col  items-center  min-h-screen bg-gray-200 px-4 text-black'>
                 <h1 className="text-2xl font-bold mb-2 text-gray-800 mt-4">Claimed Coupons</h1>
                 {coupons && coupons.length > 0 ? (

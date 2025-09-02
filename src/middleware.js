@@ -21,7 +21,7 @@ export async function middleware(request) {
    // for admin route protection
   if (isAdminPath && path !== "/admin/login") {
       const result = await verifyAdminToken(adminToken);
-         console.log("result for admin token= ",result);
+        //  console.log("result for admin token= ",result);
       if(!result.ok){  
         return NextResponse.redirect(new URL("/admin/login", request.url));
       }
@@ -32,7 +32,7 @@ export async function middleware(request) {
  if (!isAdminPath && !isPublicPath) {
     // console.log("customer middleware working...");
      const result = await verifyClientToken(token);
-     console.log("result for client token= ",result);
+    //  console.log("result for client token= ",result);
     if(!result.ok){  
       return NextResponse.redirect(new URL("/login", request.url));
     }

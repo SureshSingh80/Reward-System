@@ -8,8 +8,8 @@ export async function GET(request){
         const coupons = await Coupons.find({});
         // console.log("fetched coupons= ",coupons);
         
-        return NextResponse.json(coupons);
+        return NextResponse.json({coupons},{status:200});
     } catch (error) {
-        return NextResponse.json({message:"failed to fetch"},{status:400});
+        return NextResponse.json({message:"failed to fetch coupons"},{status:400});
     }
 }

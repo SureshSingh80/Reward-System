@@ -7,7 +7,7 @@ export async function GET(request){
             await dbConnect();
             const {searchParams} = new URL(request.url);
             const email = searchParams.get("email");
-            console.log("email =",email);
+            console.log("email for claimed coupon =",email);
 
             // validation
             if(!email)
@@ -16,10 +16,10 @@ export async function GET(request){
             const coupons = await Coupons.find({redeemedByEmail:email,isClaimed:true});
             // console.log("claimed coupons for email= ",coupons);
 
-            return NextResponse.json({message:coupons},{status:200});
+            return NextResponse.json({coupons},{status:200});
 
       }catch (error) {
-            console.log("Error in fetching data using email");
-            return NextResponse.json({message:"Error in fetching data using email"},{status:500});
+            console.log("Error in fetching user claimed coupon",error);
+            return NextResponse.json({message:"Error in fetching User Claimed Coupon"},{status:500});
       }
 }
