@@ -2,7 +2,7 @@ import axios from "axios";
 
 export async function fetchClaimedCoupon(email){
     try {
-        const res = await axios.get("/api/fetch-claimed-coupon?email=" +email);
+        const res = await axios.get("/api/fetch-claimed-coupon?email="+email);
         return {success:true, coupons:res.data.coupons};
     } catch (error) {
         console.log("error in fetching user claimedCoupons",error);

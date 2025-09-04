@@ -151,7 +151,9 @@ const page = () => {
           </button>
         </div>
         {/* show all coupons button */}
-        <div className="max-w-lg   p-8 flex flex-col items-center">
+        <div className="max-w-lg   p-8 flex flex-col items-center w-full ">
+
+          {/* show all coupon buttons */}
           <button
             onClick={() => router.push("/admin/show-coupons")}
             className="bg-white 
@@ -162,14 +164,38 @@ const page = () => {
           outline-none 
           px-4 
           py-2 
-          rounded 
           transition 
           duration-200 
           hover:bg-green-500 
-        hover:text-white  cursor-pointer"
+        hover:text-white  cursor-pointer rounded-full"
           >
             Show Generated Coupons
           </button>
+
+          {/* show all customer button */}
+          <button
+            onClick={() => router.push("/admin/customers")}
+            className="bg-white 
+              w-full
+              text-indigo-500 
+              border 
+              border-indigo-500 
+              outline-none 
+              px-4 
+              py-2 
+              rounded-full 
+              transition 
+              duration-200 
+              hover:bg-indigo-500 
+              hover:text-white  
+              cursor-pointer mt-4 "
+              
+              
+          >
+            Show Customers
+          </button>
+
+          
         </div>
       </div>
     </>
