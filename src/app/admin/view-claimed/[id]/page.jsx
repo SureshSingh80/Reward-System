@@ -1,7 +1,7 @@
 "use client";
 import Loader from "@/component/Loader";
-import axios from "axios";
-import { useParams, useRouter } from "next/navigation";
+
+import { useParams } from "next/navigation";
 import React, { use, useEffect, useState } from "react";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import EmailIcon from "@mui/icons-material/Email";

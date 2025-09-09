@@ -19,7 +19,8 @@ import DoneAllIcon from "@mui/icons-material/DoneAll";
 import {  CopyToClipBoard, fetchCoupons } from "@/utils/admin/fetchCoupons";
 
 const ShowCoupon = () => {
-  const [coupons, setCoupons] = useState(); // all avlabile coupons
+  const [coupons, setCoupons] = useState(); 
+  const [allCoupons, setAllCoupons] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [editPopUp, setEditPopUp] = useState(false);
@@ -46,6 +47,7 @@ const ShowCoupon = () => {
 
       if (result?.success) {
         setCoupons(result.data);
+        setAllCoupons(result.data);
         setLoading(false);
       } else {
         toast.error(result.error);
@@ -69,7 +71,7 @@ const ShowCoupon = () => {
           
           
           {/* Toolbar Container for searching sorting and filter */}
-         <AdminToolBar setCoupons={setCoupons}/>
+         <AdminToolBar setCoupons={setCoupons} coupons={coupons} allCoupons={allCoupons}/>
          
           {coupons && coupons.length > 0 ? (
             coupons.map((coupon) => (

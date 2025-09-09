@@ -1,7 +1,7 @@
 import axios from 'axios';
 import React, { use, useEffect, useState } from 'react'
 
-const AdminToolBar = ({setCoupons}) => {
+const AdminToolBar = ({setCoupons,coupons,allCoupons}) => {
 
   const [searchTerm,setSearchTerm] = useState("");
   const [deBoundecedSearch,setDeBoundecedSearch] = useState(searchTerm);
@@ -25,13 +25,20 @@ const AdminToolBar = ({setCoupons}) => {
             console.log("filter input is required");
             return;
           }
-          try {
-              const filteredData = await axios.get(`/api/admin/fetch-filtered-coupons?filter=${filter}`);
-              console.log(filteredData.data.message);
-              setCoupons(filteredData.data.message);
-          } catch (error) {
-            console.log("Error in fetching filtered coupons",error);
+
+          if(filter==='all'){
+            setCoupons(allCoupons);
+            return;
           }
+          if(filter==='claimed'){
+            const result = allCoupons.filter(coupon => coupon.isClaimed === true);
+            setCoupons(result);
+          }
+          if(filter==='unclaimed'){
+            const result = allCoupons.filter(coupon => coupon.isClaimed === false);
+            setCoupons(result);
+          }
+           
        }
 
        fetchFilteredCoupons();
@@ -53,42 +60,71 @@ const AdminToolBar = ({setCoupons}) => {
             return;
           }
 
-          try {
-              const filteredData = await axios.get(`/api/admin/fetch-sorting-coupons?sort=${sort}`);
-              console.log(filteredData.data.message);
-              setCoupons(filteredData.data.message);
-          } catch (error) {
-            console.log("Error in fetching filtered coupons",error);
+          // try {
+          //     const filteredData = await axios.get(`/api/admin/fetch-sorting-coupons?sort=${sort}`);
+          //     console.log(filteredData.data.message);
+          //     setCoupons(filteredData.data.message);
+          // } catch (error) {
+          //   console.log("Error in fetching filtered coupons",error);
+          // }
+          if(sort==='ascending'){
+            const result = [...allCoupons].sort((a,b) => a.rewardsPoint - b.rewardsPoint);
+            console.log(result);
+            setCoupons(result);
           }
+
+          if(sort==='descending'){
+            const result = [...allCoupons].sort((a,b) => b.rewardsPoint - a.rewardsPoint);
+            console.log(result);
+            setCoupons(result);
+          }
+
+          if(sort==='newest'){
+            const result = [...allCoupons].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            setCoupons(result);
+          }
+
+          if(sort==='default'){
+            const result = [...allCoupons].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            setCoupons(result);
+          }
+
       }
 
       fetchSortedCoupons();
   },[sort]);
   // handle searching
 
-  useEffect(()=>{
-       const handler = setTimeout(()=>{
-          setDeBoundecedSearch(searchTerm);
-       },1000);
-      return () =>{
-        clearTimeout(handler); // clear timeout on each key stroke
-      }
-  },[searchTerm]);
+  // useEffect(()=>{
+  //      const handler = setTimeout(()=>{
+  //         setDeBoundecedSearch(searchTerm);
+  //      },1000);
+  //     return () =>{
+  //       clearTimeout(handler); // clear timeout on each key stroke
+  //     }
+  // },[searchTerm]);
 
-  useEffect(()=>{
-      const fetchSearchResults = async ()=>{
-          try {
-            const searchResults = await axios.get(`/api/admin/fetch-search-coupons?search=${deBoundecedSearch}`);
-            console.log("search result= ",searchResults.data.message);
-            setCoupons(searchResults.data.message);
-          } catch (error) {
-            console.log('Error in fetching search results',error);
+  // useEffect(()=>{
+  //     const fetchSearchResults = async ()=>{
+  //         try {
+  //           const searchResults = await axios.get(`/api/admin/fetch-search-coupons?search=${deBoundecedSearch}`);
+  //           console.log("search result= ",searchResults.data.message);
+  //           setCoupons(searchResults.data.message);
+  //         } catch (error) {
+  //           console.log('Error in fetching search results',error);
              
-          }
-      }
+  //         }
+  //     }
 
-      fetchSearchResults();
-  },[deBoundecedSearch]);
+  //     fetchSearchResults();
+  // },[deBoundecedSearch]);
+
+  // searching
+  useEffect(()=>{
+    console.log(searchTerm)
+      const result = allCoupons.filter(c=> c.couponCode.toLowerCase().includes(searchTerm.toLowerCase()));
+      setCoupons(result);
+  },[searchTerm,allCoupons]);
 
   return (
 
@@ -126,7 +162,7 @@ const AdminToolBar = ({setCoupons}) => {
               <option value="ascending">Ascending</option>
               <option value="descending">Descending</option>
               <option value="newest">Newest</option>
-              <option value="oldest">oldest</option>
+             
             </select>
           </div>
         </div>
