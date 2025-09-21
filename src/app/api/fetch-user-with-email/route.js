@@ -7,14 +7,14 @@ export async function GET(request){
         await dbConnect();
         const {searchParams} = new URL(request.url);
         const email = searchParams.get("email");
-        console.log("Email from query= ",email);
+        // console.log("Email from query= ",email);
         
          // validation for email
          if(!email)
             return NextResponse.json({message:"Email is required"},{status:400});
 
          const user = await Customers.findOne({email:email});
-         console.log("user= ",user);
+        //  console.log("user= ",user);
 
 
         return NextResponse.json({user:user},{status:200});

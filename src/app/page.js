@@ -10,6 +10,7 @@ import { ClipLoader } from 'react-spinners';
 import { ToastContainer } from 'react-toastify';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/navigation';
+import { fetchUserWithEmail, redeemCoupon } from '@/utils/user/fetchUserWithEmail';
 
 export default function Home() {
    const router = useRouter();
@@ -36,20 +37,19 @@ export default function Home() {
 
     // fetch user data
     useEffect(()=>{
-       const fetchUserWithEmail = async () => {
-        console.log("fetchUserwith Email is called");
-           try {
-               const res = await axios.get('/api/fetch-user-with-email',{params:{email:user?.email}});
-               console.log("user credential= ",res.data.user);
-               setCurrentUser(res.data.user);
-           } catch (error) {
-               console.log("Error in fetching user with email ",error);
-
-           }
+       const fetchUser = async () => {
+            
+          const result = await fetchUserWithEmail(user?.email);
+          console.log("result for user= ",result);
+          if(result?.success){
+            setCurrentUser(result.user);
+          }else{
+            toast.error(result.error);
+          }
        }
        
-       if(user && !loading && user.email){
-           fetchUserWithEmail();
+       if(user && !loading && user?.email){
+           fetchUser();
        }
     },[user]);
 
@@ -66,17 +66,16 @@ export default function Home() {
        return;
      }
 
-      try {
-         const res = await axios.post('/api/redeem-coupon',{couponCode:couponCode,email:user?.email,_id:currentUser._id});
-         console.log(res);
-         setIsSubmitting(false);
-         toast.success("Coupon redeemed successfully");
-         router.push('/show-coupons');
-
-      } catch (error) {
-         setIsSubmitting(false);
-         setError(error.response.data.message);
-         console.log(error);
+      const result = await redeemCoupon(couponCode,user?.email,currentUser._id);
+      console.log("result= ", result);
+      if (result?.success) {
+        setIsSubmitting(false);
+        toast.success(result.data);
+        router.push('/show-coupons');
+      } else {
+        setIsSubmitting(false);
+        setError(result.error);
+        console.log(error);
       }
   }
 
@@ -86,7 +85,7 @@ export default function Home() {
     
       <div className="max-w-md w-full bg-white rounded-xl shadow-md p-8 flex flex-col items-center">
         <Image
-          src="/get-rewarded.jpg" // Place a happy smile image in your /public folder
+          src="/get-rewarded.jpg" 
           width={120}
           height={120}
           alt="Happy customer"

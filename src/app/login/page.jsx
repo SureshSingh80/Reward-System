@@ -19,7 +19,7 @@ import { login } from '@/utils/user/login';
 
 const Login = () => {
 
-    const {register,handleSubmit,watch,formState:{errors}}=useForm();
+    const {register,handleSubmit,watch,formState:{errors}} = useForm();
     const router = useRouter();
     
     const [loading,setLoading]=useState(false);

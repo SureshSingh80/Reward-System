@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/component/Navbar";
 import { AuthProvider } from "@/lib/AuthContext";
+import { NotificationProvider } from "./context/NotificationContext";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import NavbarWrapper from "@/component/NavbarWrapper";
 import ClientAuthWatcher from "@/component/ClientAuthWatcher";
@@ -39,9 +40,11 @@ export default function RootLayout({ children }) {
             disableTransitionOnChange
           >
         <AuthProvider>
+        <NotificationProvider>
           <NavbarWrapper />
           <ClientAuthWatcher />
           {children}
+        </NotificationProvider>
         </AuthProvider>
         </ThemeProvider>
       </body>

@@ -29,14 +29,12 @@ const CustomerSchema = new Schema({
       },
     ],
   },
-  notification: {
-    type: [
-      {
-        type: Types.ObjectId,
-        ref: "Notification",
-      },
-    ],
-  },
+  notifications: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: "Notification",
+    },
+  ],
   totalPoints: {
       type: Number,
       default:0  

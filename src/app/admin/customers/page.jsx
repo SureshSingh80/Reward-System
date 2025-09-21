@@ -14,6 +14,7 @@ export default function ShowCustomers() {
   const [customers, setCustomers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notificationPopUp, setNotificationPopUp] = useState(false);
+  const [customerId,setCustomerId] = useState(null);
 
   useEffect(() => {
     const getCustomers = async () => {
@@ -35,7 +36,7 @@ export default function ShowCustomers() {
   return (
     <>
       <div className={`p-6  min-h-screen bg-gray-200 px-4 text-black ${notificationPopUp ? "blur-sm" : ""}`}>
-        <ToastContainer />
+      
         <h1 className="text-2xl font-bold text-gray-800 mb-6">All Customers</h1>
 
         {/* Search Bar */}
@@ -87,7 +88,10 @@ export default function ShowCustomers() {
                         Email
                       </button>
                       <button
-                        onClick={() => setNotificationPopUp(true)}
+                        onClick={() => {
+                          setNotificationPopUp(true);
+                          setCustomerId(customer?._id);
+                        }}
                         className="px-3 py-1 border border-green-500 text-green-500 rounded hover:bg-green-500 hover:text-white transition"
                       >
                         Send Notification
@@ -124,10 +128,11 @@ export default function ShowCustomers() {
           </table>
         </div>
       </div>
-     
+     {/* Notification PopUp */}
       <NotificationPopUp
         notificationPopUp={notificationPopUp}
         setNotificationPopUp={setNotificationPopUp}
+        customerId={customerId}
       />
     </>
   );
